@@ -6,7 +6,7 @@ output: html_notebook
 
 # First Project
 
-In DataTrail, we will use R Markdown files like this for our data science projects. In this first project, we will try to get comfortable with R Markdown files. 
+In DataTrail, we will use R Markdown files like this for our data science projects. In this first project, we will try to get comfortable with R Markdown files and go through example basic steps of a data science workflow. 
 
 ## Forming our data science question 
 
@@ -157,6 +157,7 @@ Write up your thoughts about this data science project here and answer the follo
 - What did we find out about our questions? (what were our questions again?)
 - How did we explore our questions? 
 - What did our explorations show us? 
+- What follow up data science questions arise for you regarding this candy dataset now that we've explored it some? 
 
 ## Print out session info
 
