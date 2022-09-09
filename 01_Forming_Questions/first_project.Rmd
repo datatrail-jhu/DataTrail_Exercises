@@ -1,5 +1,5 @@
 ---
-title: "Practice R Markdown"
+title: "First Data Science Project"
 author: "DataTrail Team"
 output: html_notebook
 ---
@@ -157,27 +157,6 @@ Write up your thoughts about this data science project here and answer the follo
 - What did we find out about our questions? (what were our questions again?)
 - How did we explore our questions? 
 - What did our explorations show us? 
-
-
-### Your objectives! 
-
-Congrats! We just did the steps of a data science project! Now its your turn to add to this!
-
-To complete this project you'll need to do a few things: 
-
-1. At the very top of this file, put your own name in the `author:` place. Currently it says `"DataTrail Team"`. Be sure to put your name in quotes. 
-
-2. Add a new code chunk to this project that prints out the phrase "I completed my first data science project". See the very top of this notebook for an example of how to to do this. 
-
-3. Go through this notebook from top to bottom and run each chunk in order by clicking the tiny green triangles at the right of each chunk. 
-
-4. In the menu, go to File > Save. Now the `nb.html` output resulting file will have your new output saved to it. 
-
-5. Open up the resulting `first_project.nb.html` file and click `View in Web Browser`. Does it look good to you? 
-
-6. Upload this file to your Google Drive folder!
-
-7. Pat yourself on the back for finishing up your first project!
 
 ## Print out session info
 
