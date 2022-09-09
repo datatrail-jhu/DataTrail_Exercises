@@ -1,0 +1,86 @@
+---
+title: "Practice R Markdown"
+author: "DataTrail Team"
+output: html_notebook
+---
+
+# First Project
+
+In DataTrail, we will use R Markdown files like this for our data science projects. In this first project, we will try to get comfortable with R Markdown files. 
+
+## Practice R Markdowns
+
+This is an R Markdown file. We will often work from R Markdowns for Data Science projects because they allow us to have code, the results of the code, and our own notes all in one place. 
+
+To write code in an R Markdown, we need to put code in code chunks. You can create code chunks
+
+Code chunks look like this:
+
+```{r}
+print("This is a code chunk")
+```
+
+When you run a code chunk, the results from the code show up below the code chunk it came from.
+
+You can create a new code chunk by typing it by hand or by clicking the green +C button at the top of this window.
+
+All code needs to be within code chunks to be run. Anything outside of the code chunks is notes. You use markdown language to make these notes.
+You can read about markdown here: https://www.markdownguide.org/cheat-sheet/
+But we will also cover how to write markdown language later in the course. 
+
+```{r}
+# This dataset is automatically loaded into R so you can play with it to practice.
+iris
+```
+
+## Directories
+
+In R Markdown files, your current directory (where you are doing your R code/commands) is always where your RMarkdown (Rmd) file is located.
+
+If I use this `dir()` function it will print out the files where my current directory is, which is the same as where this R Markdown is located.
+
+```{r}
+dir()
+```
+
+You can click the green arrows at the top right of these code chunks to run an individual code chunk. OR you can click the "Run" button at the top of this whole window if you want to run all the code chunks.
+
+
+## Plots 
+
+In R Markdowns, we can have plots print out here as well. Don't worry about the specifics of this code below, we will cover this later. 
+
+```{r}
+plot(iris$Sepal.Length, 
+     iris$Sepal.Width, 
+     col = iris$Species, 
+     xlab = "Sepal Length",  
+     ylab = "Sepal Width", 
+     main = "Plant dimensions")
+```
+
+## Objectives
+
+To complete this project you'll need to do a few things: 
+
+1. At the very top of this file, put your own name in the `author:` place. Currently it says `"DataTrail Team"`. Be sure to put your name in quotes. 
+
+2. Make a new code chunk and put code in it that will print out "I ran my first R Markdown". Follow the example above. 
+
+3. Go through this notebook from top to bottom and run each chunk in order by clicking the tiny green triangles at the right of each chunk. 
+
+4. Go to File > Save. Now the `nb.html` output resulting file will have your new output saved to it. 
+
+5. Open up the resulting first_project.nb.html file and click `View in Web Browser`. 
+
+6. Upload this file to your Google Drive file!
+
+7. Pat yourself on the back for finishing up your first project!
+
+## Print out session info
+
+Session info is a good thing to print out at the end of your notebooks so that you (and other folks) referencing your notebooks know what software versions and libraries you used to run the notebook.
+
+```{r}
+sessionInfo()
+```
