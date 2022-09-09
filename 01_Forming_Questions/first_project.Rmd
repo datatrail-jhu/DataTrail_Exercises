@@ -8,9 +8,23 @@ output: html_notebook
 
 In DataTrail, we will use R Markdown files like this for our data science projects. In this first project, we will try to get comfortable with R Markdown files. 
 
-## Practice R Markdowns
+## Forming our data science question 
 
-This is an R Markdown file. We will often work from R Markdowns for Data Science projects because they allow us to have code, the results of the code, and our own notes all in one place. 
+We have defined data science as: 
+
+> ".. asking a question that can be answered with data, collecting and cleaning the data, studying the data, creating models to help understand and answer the question, and sharing the answer to the question with other people."
+
+For this first project, our question is: 
+
+> What's the most popular Halloween candy? 
+
+One way to answer this question is to collect votes from people where they choose one candy over the other. We have a dataset that we will use to answer this question. 
+
+## About R Markdowns
+
+Before we dive into this project and question, let's get acquainted with what this file is. 
+
+This is an R Markdown file. We will often work from R Markdowns for data science projects because they allow us to have code, the results of the code, and our own notes all in one place. 
 
 To write code in an R Markdown, we need to put code in code chunks. You can create code chunks
 
@@ -22,15 +36,28 @@ print("This is a code chunk")
 
 When you run a code chunk, the results from the code show up below the code chunk it came from.
 
+You can click the green arrows at the top right of these code chunks to run an individual code chunk. OR you can click the "Run" button at the top of this whole window if you want to run all the code chunks.
+
 You can create a new code chunk by typing it by hand or by clicking the green +C button at the top of this window.
+
+```{r}
+# Note that if I start a line with a '#' then what I right after it is ignored by R. 
+```
 
 All code needs to be within code chunks to be run. Anything outside of the code chunks is notes. You use markdown language to make these notes.
 You can read about markdown here: https://www.markdownguide.org/cheat-sheet/
 But we will also cover how to write markdown language later in the course. 
 
+## Set up 
+
+We are going to use this R package (we'll talk more about package in a later chapter). 
+
 ```{r}
-# This dataset is automatically loaded into R so you can play with it to practice.
-iris
+library(readr)
+library(magrittr)
+library(ggplot2)
+library(dplyr)
+library(broom)
 ```
 
 ## Directories
@@ -43,37 +70,112 @@ If I use this `dir()` function it will print out the files where my current dire
 dir()
 ```
 
-You can click the green arrows at the top right of these code chunks to run an individual code chunk. OR you can click the "Run" button at the top of this whole window if you want to run all the code chunks.
+This code above tells us what files are here. And one of those is a folder called `data`.
 
+## Getting the data 
 
-## Plots 
+We're going to read in a dataset about candy that is located in our `data` folder. 
+
+```{r}
+candy_df <- read_csv(file.path("data", "candy-data.csv"), 
+                     show_col_types = FALSE)
+```
+
+## Explore the data 
+
+R Markdown will print out data in a table type format like this: 
+This dataset is from https://fivethirtyeight.com/videos/the-ultimate-halloween-candy-power-ranking/ originally. 
+We've done some cleaning for you on this dataset already, but we'll have you do cleaning of your own data later!
+
+```{r}
+candy_df
+```
+
+## Plotting the data
 
 In R Markdowns, we can have plots print out here as well. Don't worry about the specifics of this code below, we will cover this later. 
 
+For helping us answer our question: 
+
+> What's the most popular Halloween candy? 
+
+One way would be to plot the `winpercent` data. This variable says what percentage of the time the survey responders chose a candy over any other candy it was matched up against. 
+
 ```{r}
-plot(iris$Sepal.Length, 
-     iris$Sepal.Width, 
-     col = iris$Species, 
-     xlab = "Sepal Length",  
-     ylab = "Sepal Width", 
-     main = "Plant dimensions")
+ggplot(candy_df, aes(x = reorder(competitorname, -winpercent), y = winpercent, fill = chocolate)) + 
+  geom_bar(stat = "identity") + 
+  ggtitle("Most popular candies") + 
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
+  xlab("") + 
+  ylab("Win percentage")
 ```
 
-## Objectives
+This plot shows us that `Reeses Peanut Butter Cups` had the highest win percentage!
+
+Additionally, we have color coded this plot to show whether or not a candy listed is chocolate or not. This appears to make it look like the chocolate candies have higher `winpercent` and thus are more popular than the non-chocolate candies. 
+
+But how can we ask this question in data science? We can use stats!
+
+## Get the stats 
+
+We can ask if chocolate candies are more popular by using stats! 
+
+In the second part of this project our hypothesis is: 
+
+> Chocolate candies have a higher win percent than not chocolate candies
+
+To start to ask this question, we can take averages and print these out here: 
+
+```{r}
+# First we can just use averages to see what the differences are!
+ candy_df %>% 
+  group_by(chocolate) %>% 
+  summarize(mean(winpercent))
+```
+
+60 sounds bigger than 42? But is that different enough to answer our question? 
+
+Another way to explore our hypothesis is use a formal statistical test (in this case, a t-test): 
+
+```{r}
+chocolate <- filter(candy_df, chocolate) %>% 
+  pull(winpercent)
+
+not_chocolate <- filter(candy_df, !chocolate) %>% 
+  pull(winpercent)
+
+t.test(chocolate, not_chocolate, 
+         alternative = "greater")
+```
+This test tells us our p value (we'll talk about those more later) is suppppppeer small so that yeah, 60 is different enough from 42 given the amount of data we gave this test. 
+
+### Conclusion 
+
+Write up your thoughts about this data science project here and answer the following questions: 
+
+- What did we find out about our questions? (what were our questions again?)
+- How did we explore our questions? 
+- What did our explorations show us? 
+
+
+### Your objectives! 
+
+Congrats! We just did the steps of a data science project! Now its your turn to add to this!
 
 To complete this project you'll need to do a few things: 
 
 1. At the very top of this file, put your own name in the `author:` place. Currently it says `"DataTrail Team"`. Be sure to put your name in quotes. 
 
-2. Make a new code chunk and put code in it that will print out "I ran my first R Markdown". Follow the example above. 
+2. Add a new code chunk to this project that prints out the phrase "I completed my first data science project". See the very top of this notebook for an example of how to to do this. 
 
 3. Go through this notebook from top to bottom and run each chunk in order by clicking the tiny green triangles at the right of each chunk. 
 
-4. Go to File > Save. Now the `nb.html` output resulting file will have your new output saved to it. 
+4. In the menu, go to File > Save. Now the `nb.html` output resulting file will have your new output saved to it. 
 
-5. Open up the resulting first_project.nb.html file and click `View in Web Browser`. 
+5. Open up the resulting `first_project.nb.html` file and click `View in Web Browser`. Does it look good to you? 
 
-6. Upload this file to your Google Drive file!
+6. Upload this file to your Google Drive folder!
 
 7. Pat yourself on the back for finishing up your first project!
 
