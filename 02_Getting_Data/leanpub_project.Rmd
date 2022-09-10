@@ -39,15 +39,15 @@ Here we are reading in a Google spreadsheet with information about leanpub books
 ```{r}
 # Paste your URL to your googlesheet below! Make sure to put quotes around it
 link <- "PUT_YOUR_GOOGLESHEET_URL_HERE!"
-
-link <- "https://docs.google.com/spreadsheets/d/1FXjF8NeumIyShgR0fTb1fC2fEbT76BM3I2FyY3dvkX0/edit#gid=0"
 ```
+
 We'll read in the data using the code below. You will need to follow the prompt to authorize the data to be read in using your Google login credentials. 
 
 ```{r}
-## Get data from your Google sheet
-gs4_auth()
-leanpub_df <-  read_sheet(link, col_types = "c")
+if (interactive()) {
+  ## Get data from your Google sheet
+  leanpub_df <-  read_sheet(link, col_types = "c")
+}
 ```
 
 So we have a snapshot of what this data look like at the time that we ran this analysis (and for easier sharing purposes), let's use the `readr::write_csv()` function to write this to a file. 
@@ -55,7 +55,7 @@ So we have a snapshot of what this data look like at the time that we ran this a
 Save this file to the `data` directory that we created. And name the file `leanpub_data.csv`. If you don't remember how to use the `readr::write_csv()` function, recall you can look it up using `?readr::write_csv`. 
 
 ```{r}
-readr::write_csv(leanpub_df, file.path("data", "leanpub_data.csv"))
+
 ```
 
 ## Explore the data 
@@ -63,11 +63,11 @@ readr::write_csv(leanpub_df, file.path("data", "leanpub_data.csv"))
 Use some of the functions you learned to investigate your `leanpub_df`. How many dimensions is it? What kind of class object is it? 
 
 ```{r}
-dim(leanpub_df)
+
 ```
 
 ```{r}
-class(leanpub_df)
+
 ```
 
 ## Cleaning the data
@@ -92,7 +92,7 @@ leanpub_df <- leanpub_df %>%
 Now that the data are being treated as numeric values properly, we can obtain some summary statistics for your `leanpub_df` dataset. Use a function we have discussed to do this. 
 
 ```{r}
-summary(leanpub_df)
+
 ```
 
 ## Plotting the data 
