@@ -1,0 +1,79 @@
+---
+title: "Cleaning Data Project"
+author: "DataTrail Team"
+output: html_notebook
+---
+
+# Cleaning Data Project
+
+## The goal of this analysis
+
+<Write here what the goal of this analysis is. What question are we trying to answer?> 
+
+## Set up 
+
+Let's load these packages for use. 
+
+```{r}
+## you can add more, or change...these are suggestions
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+## Set up directories
+
+Here we are going to make a data directory if it doesn't already exist. 
+
+```{r}
+if (!dir.exists("data")) {
+  dir.create("data")
+}
+```
+
+## Getting the data 
+
+Download this dataset and get it into R Studio: https://www.kaggle.com/datasets/fernandol/countries-of-the-world
+
+You can use the link, download it, once you get the file, read the dataset in using `read_csv()` and assign it the name `countries`.
+
+```{r}
+countries_df <- read_csv(file.path("data", "countries_of_the_world.csv"))
+```
+
+Use `colnames()` function to see what column names we are dealing with in this dataset. 
+
+```{r}
+colnames(countries_df)
+```
+### Neaten column names 
+
+To start, make it so all column names only have lower case letters. 
+
+```{r}
+countries_df <- countries_df %>% 
+  rename_all(tolower) 
+```
+
+Now anywhere that says `%` replace with `perc`
+
+```{r}
+countries_df <- countries_df %>% 
+  rename_all(~str_replace_all(., "%", "perc"))
+```
+
+### Treat numeric data as numeric data 
+
+You'll notice a number of these variables are numeric, but because they use commas `,` where in the US we would use a decimal `.`, R thinks that they are characters. 
+
+Use `mutate()` and `str_replace_all()` to replace `,` with `.` in these variables and then coerce them to be numeric. 
+
+```{r}
+mutate_at(vars(pop_density_per_sq_mi,
+               countries_df$coastline_coast_to_area_ratio, 
+```
+
+
+
