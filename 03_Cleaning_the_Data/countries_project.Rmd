@@ -35,45 +35,79 @@ if (!dir.exists("data")) {
 
 ## Getting the data 
 
-Download this dataset and get it into R Studio: https://www.kaggle.com/datasets/fernandol/countries-of-the-world
+We'll be using datasets from the UN statistics database.
 
-You can use the link, download it, once you get the file, read the dataset in using `read_csv()` and assign it the name `countries`.
+UN datasets can be found here: https://unstats.un.org/unsd/demographic-social/products/dyb/index.cshtml#censusdatasets 
+
+### Read in 'Population by literacy, age, sex and urban/rural residence' dataset
+
+This dataset is from: https://unstats.un.org/unsd/demographic-social/products/dyb/index.cshtml#censusdatasets and the raw form of it has been loaded into the `data/raw` folder for you. The file itself is named `UNdata_Export_20220912_213547955.csv` which is not super clear or informative. 
+
+We have written out the file path for you below. Use this file path and read the dataset in using `read_csv()` and assign it the name `literacy_df`.
 
 ```{r}
-countries_df <- read_csv(file.path("data", "countries_of_the_world.csv"))
+# Here's the file path to the literacy data
+literacy_datafile <- file.path("data", "raw", "UNdata_Export_20220912_213547955.csv")
+
+# Read in the file
+literacy_df <- read_csv(literacy_datafile)
 ```
 
-Use `colnames()` function to see what column names we are dealing with in this dataset. 
+### What's in these datasets? 
+
+Explore your new `literacy_df` data frame using functions we've discussed to get acquainted with what kinds of variables are in both of these data frames. 
 
 ```{r}
-colnames(countries_df)
+colnames(literacy_df)
 ```
+## Clean the data 
+
 ### Neaten column names 
 
-To start, make it so all column names only have lower case letters. 
+You'll notice `literacy_df` has a lot of column names with spaces, and annoying capitalization. 
+
+To fix these column names easily, we are going to use the `janitor::clean_names()` function. 
+
+If you are unsure how to use this function, remember you can do `?janitor::clean_names` to look up information about it. 
+
+Use `janitor::clean_names()` function with `literacy_df`. 
 
 ```{r}
-countries_df <- countries_df %>% 
-  rename_all(tolower) 
+literacy_df <- literacy_df %>% 
+  janitor::clean_names()
 ```
 
-Now anywhere that says `%` replace with `perc`
+### Reshape the data 
+
+You'll notice this dataset is a very very long format data. 
+
+The `sex`, `age`, `literacy`, and `record_type` are noting different variable types. 
+
+Let's reshape this so that each of these variables listed in those columns has its own column!
 
 ```{r}
-countries_df <- countries_df %>% 
-  rename_all(~str_replace_all(., "%", "perc"))
+literacy_df %>% 
+  pivot_wider(
+    id_cols = country_or_area, 
+    names_from = c(sex, literacy),
+    names_glue = "{literacy}_{sex}",
+    values_from = value)
+
 ```
 
-### Treat numeric data as numeric data 
 
-You'll notice a number of these variables are numeric, but because they use commas `,` where in the US we would use a decimal `.`, R thinks that they are characters. 
+### Explore missing data
 
-Use `mutate()` and `str_replace_all()` to replace `,` with `.` in these variables and then coerce them to be numeric. 
+Before you do analyses, its good practice to understand how much missing data you have in your datasets. 
+
+Look up the function: `naniar::miss_var_summary()` and figure out how to use it to see how many missing data points you have for each variable.
+
+Repeat this for both `countries_df` and `militaries_df`. 
 
 ```{r}
-mutate_at(vars(pop_density_per_sq_mi,
-               countries_df$coastline_coast_to_area_ratio, 
+naniar::miss_var_summary(countries_df)
 ```
 
-
-
+```{r}
+naniar::miss_var_summary(militaries_df)
+```
