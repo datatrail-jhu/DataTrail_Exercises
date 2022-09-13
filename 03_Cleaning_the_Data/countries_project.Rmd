@@ -79,6 +79,152 @@ us_gov_df <- janitor::clean_names(us_gov_df)
 
 You'll notice some of the variables in `us_gov_df` have commas `,` where really we would normally put decimals `.`. 
 
-```{r}
+We've conveniently made a vector of the column names of the variables that need to be fixed. 
 
+```{r}
+variables_to_fix <- vars(
+  "pop_density_per_sq_mi", 
+  "coastline_coast_area_ratio", 
+  "net_migration", 
+  "phones_per_1000", 
+  "arable_percent", 
+  "crops_percent", 
+  "agriculture", 
+  "industry", 
+  "service"
+)
+```
+
+Let' create a function that will replace the commas with decimal points and then coerce these variables into a numeric variable. 
+
+```{r}
+us_gov_df <- us_gov_df %>% 
+  mutate_at(
+    variables_to_fix,
+    ~str_replace_all(., ",", ".")
+    )%>% 
+  mutate_at(
+    variables_to_fix,
+    as.numeric
+  )
+```
+
+
+#### Clean up un_df
+
+There's a number of variables in `un_df` that are numeric but are being treated as a character. 
+
+Let's take a look at `labour_force_participation_female_male_percent` as an example. Use the `head()` function and print out the first 10 rows to see.  
+
+```{r}
+head(un_df$labour_force_participation_female_male_pop_percent, 
+     n = 10)
+```
+
+Two things we can notice here. One is that really it looks like this is two variables, one for female and one for male. We'll want to split this into two columns. 
+
+Another is that they are using two different items to note missing data `-99` and `...` For R to deal with missing data appopriately we will want to change these to be `NA`. 
+
+Let's start with the missing data. To replace these `-99` and `...` we can use the function: `naniar::replace_with_na()`. We'll want to do this for every variable, not just the one we looked at above. 
+
+```{r}
+un_df <- naniar::replace_with_na_all(un_df,
+                                     condition = ~.x %in% c(-99, "-99", "..."))
+```
+
+
+Let's split the `life_expectancy_at_birth_females_males_years` column up into two columns so we can more appropriately deal with these data. To do this we can use a handy function called `tidyr::separate()`. Call the new resulting columns `life_expectancy_at_birth_females` and `life_expectancy_at_birth_males` by specifying this with the `into` argument.
+
+```{r}
+un_df <- un_df %>% 
+  tidyr::separate(life_expectancy_at_birth_females_males_years, 
+                  sep = "/", 
+                  into = c("life_expectancy_at_birth_females",
+                           "life_expectancy_at_birth_males"))
+```
+
+
+After splitting these data, you'll notice they are still characters, so you will need to coerce them to numeric variables with a `mutate()` step. 
+
+In fact, there are a lot more columns like this. But for now we have prepared for you the mutate below that will change the columns we will need to be changed at once. You only need to fill in the blanks. 
+
+```{r}
+un_df <- un_df %>% 
+  mutate_at(vars(life_expectancy_at_birth_females, 
+                 life_expectancy_at_birth_males), 
+            as.numeric)
+```
+
+
+### Treat factors as factors
+
+Both `un_df` and `us_gov_df` have `region` columns. 
+
+Let's run `summary` on each.  
+
+```{r}
+summary(un_df$region) 
+summary(us_gov_df$region)
+```
+
+The regions listed are repeated but because they are characters, summary doesn't give us useful information about the categories. 
+
+These `region` columns would be best treated as factors. Turn both of the repspective `region` columns into factors. 
+
+```{r}
+us_gov_df <- us_gov_df %>% mutate(region = as.factor(region)) 
+un_df <- un_df %>% mutate(region = as.factor(region)) 
+```
+
+Re-run `summary` on your region columns  to confirm that the data make more sense now. 
+
+```{r}
+summary(un_df$region) 
+summary(us_gov_df$region)
+```
+
+### Joining the data 
+
+Now we have two generally clean datasets that both have information about countries. Use a `dplyr::join` function to join all the rows for countries that are in both `un_df` and `us_gov_df` but exclude rows from countries that aren't in both. Look up `?dplyr::join` for more help. You will need to use the `by` argument. 
+
+Call this new data frame `countries_df`. 
+
+```{r}
+countries_df <- inner_join(un_df, us_gov_df, by = "country")
+```
+
+### Reshape data in preparation for plotting 
+
+We want to see how literacy is related to life expectancy. But have literacy split up by gender. Let's reshape our data into something that will be easier to plot. 
+
+First, select only the following columns: `country`, `life_expectancy_at_birth_females`, `life_expectancy_at_birth_males`, and `literacy_percent`. Name this new `select`ed data frame `plotting_df`. 
+
+```{r}
+plotting_df <- countries_df %>% 
+  select(country, 
+         life_expectancy_at_birth_females, 
+         life_expectancy_at_birth_males, 
+         literacy_percent)
+```
+
+Now, let's reshape this data so that it is longer. We will want a column for `gender` and one column for `life_expectancy`. Use the `tidyr::gather()` function. 
+
+```{r}
+plotting_df <- 
+  gather(plotting_df, 
+       "gender", 
+       "life_expectancy", 
+       -literacy_percent, -country)
+```
+
+You'll notice your new column `gender` has the whole old variable name. We don't really need all that. Use string manipulations so that you only have either `males` or `females`. 
+
+## Plot the data! 
+
+Let's make a plot of life expectancy and literacy rates! 
+
+```{r}
+countries_df %>% 
+  ggplot(aes(life_expectancy_at_birth_years_males, literacy_percent)) + 
+  geom_point()
 ```
