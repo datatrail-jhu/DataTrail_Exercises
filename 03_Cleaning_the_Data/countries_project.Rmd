@@ -33,81 +33,52 @@ if (!dir.exists("data")) {
 }
 ```
 
-## Getting the data 
 
-We'll be using datasets from the UN statistics database.
+## Get the data 
 
-UN datasets can be found here: https://unstats.un.org/unsd/demographic-social/products/dyb/index.cshtml#censusdatasets 
+We are going to use two different country datasets from Kaggle. 
 
-### Read in 'Population by literacy, age, sex and urban/rural residence' dataset
+This UN data-derived dataset: https://www.kaggle.com/datasets/sudalairajkumar/undata-country-profiles
+The resulting CSV file is called `country_profile_variables.csv`.
 
-This dataset is from: https://unstats.un.org/unsd/demographic-social/products/dyb/index.cshtml#censusdatasets and the raw form of it has been loaded into the `data/raw` folder for you. The file itself is named `UNdata_Export_20220912_213547955.csv` which is not super clear or informative. 
+This US government-derived dataset: 
+https://www.kaggle.com/datasets/fernandol/countries-of-the-world
+The resulting CSV file is called `countries of the world.csv`.
 
-We have written out the file path for you below. Use this file path and read the dataset in using `read_csv()` and assign it the name `literacy_df`.
-
-```{r}
-# Here's the file path to the literacy data
-literacy_datafile <- file.path("data", "raw", "UNdata_Export_20220912_213547955.csv")
-
-# Read in the file
-literacy_df <- read_csv(literacy_datafile)
-```
-
-### What's in these datasets? 
-
-Explore your new `literacy_df` data frame using functions we've discussed to get acquainted with what kinds of variables are in both of these data frames. 
+Both datasets have been downloaded and placed in the `data` and `raw` folder. Use readr::read_csv function to reach each dataset in. Call the first one `un_df` and the second `us_gov_df`. 
 
 ```{r}
-colnames(literacy_df)
-```
-## Clean the data 
-
-### Neaten column names 
-
-You'll notice `literacy_df` has a lot of column names with spaces, and annoying capitalization. 
-
-To fix these column names easily, we are going to use the `janitor::clean_names()` function. 
-
-If you are unsure how to use this function, remember you can do `?janitor::clean_names` to look up information about it. 
-
-Use `janitor::clean_names()` function with `literacy_df`. 
-
-```{r}
-literacy_df <- literacy_df %>% 
-  janitor::clean_names()
-```
-
-### Reshape the data 
-
-You'll notice this dataset is a very very long format data. 
-
-The `sex`, `age`, `literacy`, and `record_type` are noting different variable types. 
-
-Let's reshape this so that each of these variables listed in those columns has its own column!
-
-```{r}
-literacy_df %>% 
-  pivot_wider(
-    id_cols = country_or_area, 
-    names_from = c(sex, literacy),
-    names_glue = "{literacy}_{sex}",
-    values_from = value)
-
-```
-
-
-### Explore missing data
-
-Before you do analyses, its good practice to understand how much missing data you have in your datasets. 
-
-Look up the function: `naniar::miss_var_summary()` and figure out how to use it to see how many missing data points you have for each variable.
-
-Repeat this for both `countries_df` and `militaries_df`. 
-
-```{r}
-naniar::miss_var_summary(countries_df)
+# Read in the dataset for un_df
+un_df <- read_csv(file.path("data", "raw", "country_profile_variables.csv"))
 ```
 
 ```{r}
-naniar::miss_var_summary(militaries_df)
+# Read in the dataset for us_gov_df
+us_gov_df <- read_csv(file.path("data", "raw", "countries of the world.csv"))
+```
+
+Use functions we have discussed previously to see what variables are in both `un_df` and `us_gov_df`. 
+
+```{r}
+colnames(un_df)
+```
+```{r}
+colnames(us_gov_df)
+```
+
+### Cleaning the datasets 
+
+You'll notice both datasets have pretty messy looking column names that are annoying to use. Use the `janitor::clean_names()` function to clean these up. 
+
+```{r}
+un_df <- janitor::clean_names(un_df)
+us_gov_df <- janitor::clean_names(us_gov_df)
+```
+
+#### Clean up us_gov_df
+
+You'll notice some of the variables in `us_gov_df` have commas `,` where really we would normally put decimals `.`. 
+
+```{r}
+
 ```
