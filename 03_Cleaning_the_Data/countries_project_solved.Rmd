@@ -166,6 +166,12 @@ countries_df <- inner_join(un_df, literacy_df,
                            by = c("country" = "entity"))
 ```
 
+We will be returning to this dataset in a future project. Save `countries_df` to an RDS file here. Save this file to the `data` folder and name it "countries_df.rds".
+
+```{r}
+write_rds(countries_df, file.path("data", "countries_df.rds"))
+```
+
 ### Reshape data in preparation for plotting 
 
 We want to see how literacy is related to life expectancy. But have literacy split up by gender. Let's reshape our data into something that will be easier to plot. 

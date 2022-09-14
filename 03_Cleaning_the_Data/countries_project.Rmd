@@ -44,27 +44,26 @@ The resulting CSV file is called `country_profile_variables.csv`.
 This literacy dataset with statistics about literacy across countries
 https://www.kaggle.com/datasets/programmerrdai/literacy
 
-The resulting CSV file is called `countries of the world.csv`.
+The resulting CSV file is called `cross-country-literacy-rates`.
 
-Both datasets have been downloaded and placed in the `data` and `raw` folder. Use readr::read_csv function to reach each dataset in. Call the first one `un_df` and the second `us_gov_df`. 
+Both datasets have been downloaded and placed in the `data` and `raw` folder. Use readr::read_csv function to reach each dataset in. Call the first one `un_df` and the second `literacy_df`. 
 
 ```{r}
 # Read in the dataset for un_df
-un_df <- read_csv(file.path("data", "raw", "country_profile_variables.csv"))
 ```
 
 ```{r}
-# Read in the dataset for us_gov_df
-literacy_df <- read_csv(file.path("data", "raw", "cross-country-literacy-rates.csv"))
+# Read in the dataset for literacy_df
+
 ```
 
 Use functions we have discussed previously to see what variables are in both `un_df` and `us_gov_df`. 
 
 ```{r}
-colnames(un_df)
+
 ```
 ```{r}
-colnames(literacy_df)
+
 ```
 
 ### Cleaning the datasets 
@@ -72,20 +71,16 @@ colnames(literacy_df)
 You'll notice both datasets have pretty messy looking column names that are annoying to use. Use the `janitor::clean_names()` function to clean these up. 
 
 ```{r}
-un_df <- janitor::clean_names(un_df)
-literacy_df <- janitor::clean_names(literacy_df)
+
 ```
 
 #### Clean up literacy_df
 
 The `literacy_df` data frame shows multiple rows for each country. For this analysis, let's only keep the latest year recorded for each country. 
-
 You can use the `arrange()` and `distinct()` functions to do this. 
 
 ```{r}
-literacy_df <- literacy_df %>% 
-  arrange(-year) %>% 
-  distinct(entity, .keep_all = TRUE)
+
 ```
 
 
@@ -96,8 +91,7 @@ There's a number of variables in `un_df` that are numeric but are being treated 
 Let's take a look at `life_expectancy_at_birth_females_males_years` as an example. Use the `head()` function and print out the first 10 rows to see.  
 
 ```{r}
-head(un_df$life_expectancy_at_birth_females_males_years, 
-     n = 10)
+
 ```
 
 Two things we can notice here. One is that really it looks like this is two variables, one for female and one for male. We'll want to split this into two columns. 
@@ -114,23 +108,16 @@ un_df <- naniar::replace_with_na_all(un_df,
 Let's split the `life_expectancy_at_birth_females_males_years` column up into two columns so we can more appropriately deal with these data. To do this we can use a handy function called `tidyr::separate()`. Call the new resulting columns `life_expectancy_at_birth_females` and `life_expectancy_at_birth_males` by specifying this with the `into` argument.
 
 ```{r}
-un_df <- un_df %>% 
-  tidyr::separate(life_expectancy_at_birth_females_males_years, 
-                  sep = "/", 
-                  into = c("life_expectancy_at_birth_females",
-                           "life_expectancy_at_birth_males"))
+
 ```
 
 
 After splitting these data, you'll notice they are still characters, so you will need to coerce them to numeric variables with a `mutate()` step. 
 
-In fact, there are a lot more columns like this. But for now we have prepared for you the mutate below that will change the columns we will need to be changed at once. You only need to fill in the blanks. 
+In fact, there are a lot more columns like this. But for now just make these life_expectancy  variables into numeric and don't worry about the others. 
 
 ```{r}
-un_df <- un_df %>% 
-  mutate_at(vars(life_expectancy_at_birth_females, 
-                 life_expectancy_at_birth_males), 
-            as.numeric)
+
 ```
 
 The `un_df` has a `region` column. 
@@ -138,31 +125,36 @@ The `un_df` has a `region` column.
 Let's run `summary` on it.  
 
 ```{r}
-summary(un_df$region) 
+
 ```
 
 The regions listed are repeated but because they are characters, summary doesn't give us useful information about the categories. 
-
-These `region` columns would be best treated as factors. Turn both of the repspective `region` columns into factors. 
+This `region` columns would be best treated as factors. Turn this `region` column into a factor. 
 
 ```{r}
-un_df <- un_df %>% mutate(region = as.factor(region)) 
+
 ```
 
 Re-run `summary` on your region columns  to confirm that the data make more sense now. 
 
 ```{r}
-summary(un_df$region) 
+
 ```
 
 ### Joining the data 
 
-Now we have two generally clean datasets that both have information about countries. Use a `dplyr::join` function to join all the rows for countries that are in both `un_df` and `us_gov_df` but exclude rows from countries that aren't in both. Look up `?dplyr::join` for more help. You will need to use the `by` argument. 
+Now we have two generally clean datasets that both have information about countries. Use a `dplyr::join` function to join all the rows for countries that are in both `un_df` and `literacy_df` but exclude rows from countries that aren't in both. Look up `?dplyr::join` for more help. You will need to use the `by` argument. 
 
 Call this new data frame `countries_df`. 
 
 ```{r}
-countries_df <- inner_join(un_df, literacy_df, by = c("country" = "entity"))
+
+```
+
+We will be returning to this dataset in a future project. Save `countries_df` to an RDS file here. Save this file to the `data` folder and name it "countries_df.rds".
+
+```{r}
+
 ```
 
 ### Reshape data in preparation for plotting 
@@ -174,29 +166,19 @@ First, select only the following columns: `country`, `year`, `life_expectancy_at
 In this same step, let's also shorten the column name `literacy_rates_world_bank_cia_world_factbook_and_other_sources` to just `literacy_rates`. 
 
 ```{r}
-plotting_df <- countries_df %>% 
-  select(country, 
-         year,
-         life_expectancy_at_birth_females, 
-         life_expectancy_at_birth_males, 
-         literacy_rates = literacy_rates_world_bank_cia_world_factbook_and_other_sources)
+
 ```
 
 Now, let's reshape this data so that it is longer. We will want a column for `gender` and one column for `life_expectancy`. Use the `tidyr::gather()` function. 
 
 ```{r}
-plotting_df <- 
-  gather(plotting_df, 
-       "gender", 
-       "life_expectancy", 
-       -literacy_rates, -country, -year)
+
 ```
 
 You'll notice your new column `gender` has the whole old variable name. We don't really need all that. Use string manipulations so that you only have either `males` or `females`. 
 
 ```{r}
-plotting_df <- plotting_df %>% 
-  mutate(gender = str_remove(gender, "life_expectancy_at_birth_"))
+
 ```
 
 ## Plot the data! 
