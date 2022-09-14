@@ -36,18 +36,19 @@ if (!dir.exists("data")) {
 
 ## Get the data 
 
-The data we'll be using for this part of the project are about irbnbs and can be downloaded from here: https://www.kaggle.com/datasets/arianazmoudeh/airbnbopendata
+The data we'll be using for this part of the project are about Airbnbs and can be downloaded from here: https://www.kaggle.com/datasets/arianazmoudeh/airbnbopendata
 
 First, we'll read the data in from our `data/raw` directory. Use the `read_csv` function to do this. Call this new data frame `airbnb_df`. 
 
 ```{r}
-
+airbnb_df <- readr::read_csv(file.path("data", "raw", "Airbnb_Open_Data.csv"))
 ```
 
 Use this chunk to do some exploring of this dataset to get an idea of what kind of information is here. 
 
 ```{r}
-
+colnames(airbnb_df)
+dim(airbnb_df)
 ```
 
 ### Clean the data 
@@ -55,7 +56,7 @@ Use this chunk to do some exploring of this dataset to get an idea of what kind 
 Use the `janitor::clean_names` function to clean up some of these column names 
 
 ```{r}
-
+airbnb_df <- janitor::clean_names(airbnb_df) 
 ```
 
 ### Fix `neighbourhood_group` variable
@@ -63,26 +64,32 @@ Use the `janitor::clean_names` function to clean up some of these column names
 Take a look at the `neighbourhood_group` variable. Try to summarize how many different neighborhood groups there are. 
 
 ```{r}
-
+summary(airbnb_df$neighbourhood_group)
 ```
 
 You will find that this variable is a character, so we will need to coerce it to a factor to get meaningful information about the groups here.
 
 ```{r}
-
+summary(as.factor(airbnb_df$neighbourhood_group))
 ```
+
 You'll notice there's some typos here `brookln` and `manhatan`. Fix these typos in this dataset by whatever method you find most intuitive. After you have fixed the typos, make sure that you coerce `neighbourhood_group` as a factor. 
 
 ```{r}
-
+airbnb_df <- airbnb_df %>% 
+  mutate(neighbourhood_group = case_when(
+    neighbourhood_group == "brookln" ~ "Brooklyn",
+    neighbourhood_group == "manhatan" ~ "Manhattan",
+    TRUE ~ neighbourhood_group), 
+    neighbourhood_group = as.factor(neighbourhood_group)
+    ) 
 ```
 
 Re-run `summary()` on the `neighbourhood_group` to see if your code successfully fixed these misspellings. 
 
 ```{r}
-
+summary(airbnb_df$neighbourhood_group) 
 ```
-
 ### Fix numeric data
 
 The `service_fee` and `price` columns are really numeric data but are being treated as characters because there are `$` and `,` included. 
@@ -91,17 +98,21 @@ We'll need to get rid of these. **Hint** use this kind of code:
 `stringr::str_remove(service_fee, "\\$|,")` within a mutate to get rid of the dollar signs. After you get rid of the dollar signs from both `service_fee` and `price`, coerce both of these variables to be numeric. 
 
 ```{r}
-
+airbnb_df <- airbnb_df %>% 
+  mutate(service_fee = stringr::str_remove(service_fee, "\\$|,"), 
+         price = stringr::str_remove(price, "\\$|,"), 
+         service_fee = as.numeric(service_fee), 
+         price = as.numeric(price))
 ```
 
 Use summary to see if `price` and `service_fee` are now appropriately numeric data. 
 
 ```{r}
-
+summary(airbnb_df$price)
 ```
 
 ```{r}
-
+summary(airbnb_df$service_fee)
 ```
 
 ## Plot the data
@@ -118,14 +129,15 @@ DATA_FRAME %>%
 We recommend keeping the ggplot2 cheatsheet handy while you are going through this project: 
 https://www.rstudio.com/resources/cheatsheets/
 
-Using what we have learned about ggplot2, make a plots that explore the price of the airbnb and if it is related to any of the variables in the `airbnb_df`. 
-
 ### Scatter plot 
 
 Now make a scatter plot that explores if `price` is related to one of the other numeric variables in the dataset. 
 
 ```{r}
-
+airbnb_df %>% 
+  ggplot(aes(price, reviews_per_month, color = neighbourhood_group)) + 
+  geom_point() + 
+  theme_bw()
 ```
 
 ### Violin plot 
@@ -133,7 +145,10 @@ Now make a scatter plot that explores if `price` is related to one of the other 
 Make a violin plot for the price distribution of different neighborhood groups. 
 
 ```{r}
-
+airbnb_df %>% 
+  ggplot(aes(price, neighbourhood_group, fill = neighbourhood_group)) + 
+  geom_violin() + 
+  theme_bw()
 ```
 
 ### Barplot 
@@ -141,7 +156,12 @@ Make a violin plot for the price distribution of different neighborhood groups.
 Now make a plot that explores if there's a particular `room_type` that has a higher price than others. You may choose to summarize the `price` by the `room_type`.   
 
 ```{r}
-
+airbnb_df %>% 
+  group_by(room_type) %>% 
+  summarize(avg_price = mean(price, na.rm = TRUE)) %>% 
+  ggplot(aes(room_type, avg_price, fill = room_type)) + 
+  geom_bar(stat = "identity") + 
+  theme_minimal()
 ```
 
 ### Your choice plot! 
@@ -151,7 +171,11 @@ Make one more plot that is completely your choice about what variables you'd lik
 See http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html for inspiration and ideas 
 
 ```{r}
-
+airbnb_df %>% 
+  ggplot(aes(price)) + 
+  geom_density() + 
+  theme_minimal() + 
+  facet_wrap(~neighbourhood_group)
 ```
 
 ### Conclusion 
