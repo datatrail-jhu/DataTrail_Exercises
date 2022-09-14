@@ -45,19 +45,18 @@ In a previous project in `03_Cleaning_Data`, we cleaned a dataset about countrie
 Read in this file from its location in the `03_Cleaning_Data` folder. **Hint** you will need to use a `..` to backout of this current folder and reference the parent folder of `05_Get_Stats`. 
 
 ```{r}
-# Read in the dataset for un_df
-countries_df <- read_rds(file.path("..", "03_Cleaning_the_Data", "data", "countries_df.rds"))
+
 ```
 
 Use functions we have discussed previously to see remind yourself of what vairables are ih `countries_df`. 
 
 ```{r}
-colnames(countries_df)
+
 ```
 
 ### Cleaning the datasets 
 
-We're going to select down to columns we are interested in . 
+We're going to select down to columns we are interested in.  Note that we are also shortening some of the names of these variables so that they fit into graphs more easily. 
 
 ```{r}
 countries_df <- countries_df %>% 
@@ -85,30 +84,20 @@ Repeat the steps we used in that project for the following columns:
 `labour_force_participation_female_male_pop_percent`
 `pop_using_improved_drinking_water_urban_rural_percent`     
 
-
 ```{r}
-countries_df <- countries_df %>% 
-  separate(labour_force_participation_female_male_pop_percent, 
-           sep = "/", 
-           into = c("labour_force_females",
-                    "labour_force_males")) %>% 
-  separate(pop_using_improved_drinking_water_urban_rural_percent, 
-           sep = "/", 
-           into = c("pop_water_urban",
-                    "pop_water_rural"))
+
 ```
 
 Now all of the data in our set, except for `country`, should be numeric, but it isn't necessarily. Use `mutate_at` but exclude `country` and try to use as.numeric on all the other variables. **Hint** you will need an argument that specifies `vars(-country)` to exclude the `country` column. 
 
 ```{r}
-countries_df <- countries_df %>% 
-  mutate_at(vars(-country), as.numeric)
+
 ```
 
 Save this version of your data to an RDS file in this project. 
 
 ```{r}
-write_rds(countries_df, file.path("data", "countries_df.rds"))
+
 ```
 
 ## Plot the data 
@@ -117,62 +106,52 @@ Let's explore what kinds of distributions these variables have?
 
 Use ggplot2::geom_density() to do this for at least 5 variables of your choice in `countries_df`. 
 
-```{r}
-ggplot(countries_df, aes(pop)) + 
-  geom_density() + 
-  theme_minimal() + 
-  xlab("Population in thousands (2017)")
-```
+### Density plot 1 
 
 ```{r}
-ggplot(countries_df, aes(labour_force_females)) + 
-  geom_density() + 
-  theme_minimal() + 
-  xlab("Labour force participation females")
+
 ```
 
-```{r}
-ggplot(countries_df, aes(labour_force_males)) + 
-  geom_density() + 
-  theme_minimal() + 
-  xlab("Labour force participation males")
-```
+### Density plot 2 
 
 ```{r}
-ggplot(countries_df, aes(urban_perc)) + 
-  geom_density() + 
-  theme_minimal() + 
-  xlab("Labour force participation males")
+
 ```
 
-```{r}
-ggplot(countries_df, aes(infant_mortality)) + 
-  geom_density() + 
-  theme_minimal() + 
-  xlab("Infant mortality per 1000 births")
-```
+### Density plot 3
 
 ```{r}
-ggplot(countries_df, aes(seats_held_women)) + 
-  geom_density() + 
-  theme_minimal() + 
-  xlab("Percentage of political seats held by women")
+
+```
+
+### Density plot 4
+
+```{r}
+
+```
+
+### Density plot 5
+
+```{r}
+
 ```
 
 ## Run stats  
 
 For this project, we are going to run some exploratory stats. 
  
-Use the `cor()` function to create a correlation matrix of all the numeric variables in `countries_df`
+Use the `cor()` function to create a correlation matrix of all the numeric variables in `countries_df`. You still need to use the argument `use = "complete.obs"`. You will also need to exclude the `country` column from this analysis since it is not numeric.  
+
+Call this correlation matrix `cor_matrix`. 
 
 ```{r}
-cor_matrix <- cor(countries_df[, -1], use = "complete.obs")
+
 ```
 
-Make a table out of this correlation matrix. 
+Make a table out of this correlation matrix using the `kable()` function. 
 
 ```{r}
-kable(cor_matrix)
+
 ```
 
 Use the corrplot::corrplot() function to make a correlation matrix from these data. 
@@ -181,12 +160,14 @@ Use the corrplot::corrplot() function to make a correlation matrix from these da
 plot <- corrplot(cor_matrix, type = "upper", order = "hclust", 
                  tl.col = "black")
 ```
+
 What do you think about the interaction and groupings of these variables? Is there anything surprising? 
 
-Save your plot using the following code. 
+Save your plot using the following code. Replace `FILEPATH TO WHERE IT SHOULD BE SAVED` with a file path that will save the plot to our `plots` folder with an appropriate file name. 
+
 
 ```{r}
-png(file.path("plots", "corrplot.png")) 
+png(`FILEPATH TO WHERE IT SHOULD BE SAVED`) 
 plot
 dev.off()
 ```
