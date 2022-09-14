@@ -1,0 +1,193 @@
+---
+title: "Cleaning Data Project"
+author: "DataTrail Team"
+output: html_notebook
+---
+
+# Cleaning Data Project
+
+## The goal of this analysis
+
+<Write here what the goal of this analysis is. What question are we trying to answer?> 
+
+## Set up 
+
+Let's load these packages for use. 
+
+```{r}
+## you can add more, or change...these are suggestions
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(corrplot)
+library(knitr)
+```
+
+## Set up directories
+
+Here we are going to make a data directory if it doesn't already exist. 
+
+```{r}
+if (!dir.exists("data")) {
+  dir.create("data")
+}
+```
+
+
+## Get the data 
+
+In a previous project in `03_Cleaning_Data`, we cleaned a dataset about countries and saved this to an RDS file. 
+Read in this file from its location in the `03_Cleaning_Data` folder. **Hint** you will need to use a `..` to backout of this current folder and reference the parent folder of `05_Get_Stats`. 
+
+```{r}
+# Read in the dataset for un_df
+countries_df <- read_rds(file.path("..", "03_Cleaning_the_Data", "data", "countries_df.rds"))
+```
+
+Use functions we have discussed previously to see remind yourself of what vairables are ih `countries_df`. 
+
+```{r}
+colnames(countries_df)
+```
+
+### Cleaning the datasets 
+
+We're going to select down to columns we are interested in . 
+
+```{r}
+countries_df <- countries_df %>% 
+  select(country, 
+         pop = population_in_thousands_2017, 
+         pop_density = population_density_per_km2_2017, 
+         sex_ratio = sex_ratio_m_per_100_f_2017, 
+         gdp = gdp_per_capita_current_us, 
+         labour_force_participation_female_male_pop_percent, 
+         urban_perc = urban_population_percent_of_total_population, 
+         growth_rate = population_growth_rate_average_annual_percent, 
+         fertility = fertility_rate_total_live_births_per_woman, 
+         life_exp_female = life_expectancy_at_birth_females, 
+         life_exp_male =life_expectancy_at_birth_males, 
+         infant_mortality = infant_mortality_rate_per_1000_live_births, 
+         seats_held_women = seats_held_by_women_in_national_parliaments_percent, 
+         pop_using_improved_drinking_water_urban_rural_percent)
+```
+
+
+There are some variables here that need to be split up into two columns much like we did before in `03_Cleaning_the_Data`. 
+
+Repeat the steps we used in that project for the following columns: 
+
+`labour_force_participation_female_male_pop_percent`
+`pop_using_improved_drinking_water_urban_rural_percent`     
+
+
+```{r}
+countries_df <- countries_df %>% 
+  separate(labour_force_participation_female_male_pop_percent, 
+           sep = "/", 
+           into = c("labour_force_females",
+                    "labour_force_males")) %>% 
+  separate(pop_using_improved_drinking_water_urban_rural_percent, 
+           sep = "/", 
+           into = c("pop_water_urban",
+                    "pop_water_rural"))
+```
+
+Now all of the data in our set, except for `country`, should be numeric, but it isn't necessarily. Use `mutate_at` but exclude `country` and try to use as.numeric on all the other variables. **Hint** you will need an argument that specifies `vars(-country)` to exclude the `country` column. 
+
+```{r}
+countries_df <- countries_df %>% 
+  mutate_at(vars(-country), as.numeric)
+```
+
+## Plot the data 
+
+Let's explore what kinds of distributions these variables have?
+
+Use ggplot2::geom_density() to do this for at least 5 variables of your choice in `countries_df`. 
+
+```{r}
+ggplot(countries_df, aes(pop)) + 
+  geom_density() + 
+  theme_minimal() + 
+  xlab("Population in thousands (2017)")
+```
+
+```{r}
+ggplot(countries_df, aes(labour_force_females)) + 
+  geom_density() + 
+  theme_minimal() + 
+  xlab("Labour force participation females")
+```
+
+```{r}
+ggplot(countries_df, aes(labour_force_males)) + 
+  geom_density() + 
+  theme_minimal() + 
+  xlab("Labour force participation males")
+```
+
+```{r}
+ggplot(countries_df, aes(urban_perc)) + 
+  geom_density() + 
+  theme_minimal() + 
+  xlab("Labour force participation males")
+```
+
+```{r}
+ggplot(countries_df, aes(infant_mortality)) + 
+  geom_density() + 
+  theme_minimal() + 
+  xlab("Infant mortality per 1000 births")
+```
+
+```{r}
+ggplot(countries_df, aes(seats_held_women)) + 
+  geom_density() + 
+  theme_minimal() + 
+  xlab("Percentage of political seats held by women")
+```
+
+## Run stats  
+
+Use the 
+
+```{r}
+cor_matrix <- cor(countries_df[, -1], use = "complete.obs")
+```
+
+```{r}
+kable(cor_matrix)
+```
+
+
+```{r}
+plot <- corrplot(cor_matrix, type = "upper", order = "hclust", 
+                 tl.col = "black")
+```
+
+```{r}
+png("corrplot.png")
+plot
+dev.off()
+```
+
+
+### Conclusion 
+
+Write up your thoughts about this data science project here and answer the following questions: 
+
+- What did we find out about our questions? 
+- How did we explore our questions? 
+- What did our explorations show us? 
+- What follow up data science questions arise for you regarding this candy dataset now that we've explored it some? 
+
+## Print out session info
+
+Session info is a good thing to print out at the end of your notebooks so that you (and other folks) referencing your notebooks know what software versions and libraries you used to run the notebook.
+
+```{r}
+sessionInfo()
+```
