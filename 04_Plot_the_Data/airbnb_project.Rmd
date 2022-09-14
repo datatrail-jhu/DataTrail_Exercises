@@ -1,0 +1,132 @@
+---
+title: "Data Visualization Project"
+author: "Data Treal Team"
+output: html_document
+---
+
+# Data Visualization Project
+
+## The goal of this analysis
+
+<Write here what the goal of this analysis is. What question are we trying to answer?> 
+
+## Set up 
+
+Let's load these packages for use. Add or subtract from this list as you see fit. 
+
+```{r setup, include=FALSE}
+## load packages
+library(janitor)
+library(ggplot2)
+library(dplyr)
+library(ggthemes)
+library(readr)
+```
+
+
+## Set up directories
+
+Here we are going to make a data directory if it doesn't already exist. 
+
+```{r}
+if (!dir.exists("data")) {
+  dir.create("data")
+}
+```
+
+## Get the data 
+
+The data we'll be using for this part of the project are about airbnbs and can be downloaded from here: https://www.kaggle.com/datasets/arianazmoudeh/airbnbopendata
+
+First, we'll read the data in from our `data/raw` directory. Use the `read_csv` function to do this. Call this new data frame `airbnb_df`. 
+
+```{r}
+airbnb_df <- readr::read_csv(file.path("data", "raw", "Airbnb_Open_Data.csv"))
+```
+
+Use this chunk to do some exploring of this dataset to get an idea of what kind of information is here. 
+
+```{r}
+colnames(airbnb_df)
+dim(airbnb_df)
+```
+
+### Clean the data 
+
+Use the `janitor::clean_names` function to clean up some of these column names 
+
+```{r}
+airbnb_df <- janitor::clean_names(airbnb_df) 
+```
+
+Take a look at the `neighbourhood_group` variable. Try to summarize how many different neighborhood groups there are. 
+
+```{r}
+summary(airbnb_df$neighbourhood_group)
+```
+
+You will find that this variable is a character, so we will need to coerce it to a factor to get meaningful information about the groups here. Coerce `neighbourhood_group` to a factor. 
+
+```{r}
+airbnb_df <- airbnb_df %>% 
+  mutate(neighbourhood_group = as.factor(neighbourhood_group))
+```
+
+```{r}
+summary(airbnb_df$neighbourhood_group)
+```
+
+
+```{r}
+airbnb_df %>% 
+  # some cleaning
+  dplyr::mutate(service_fee = as.numeric(gsub("\\$", "", service_fee)), 
+                price = as.numeric(gsub("\\$", "", price)), 
+                neighbourhood_group = case_when(
+                  neighbourhood_group == "brookln" ~ "Brooklyn",
+                  neighbourhood_group == "manhatan" ~ "Manhattan",
+                  TRUE ~ neighbourhood_group)
+                ) %>% 
+  # Remove rows that don't have a price listed
+  dplyr::filter(!is.na(price))
+```
+
+```{r}
+summary(airbnb_df$price)
+```
+
+```{r}
+airbnb_df %>% 
+  ggplot(aes(price, color = neighbourhood_group)) + 
+  geom_density() + 
+  theme_minimal()
+```
+
+```{r}
+# Make a plot with airbnb_df
+airbnb_df %>% 
+  ggplot(aes(neighbourhood_group, price)) + 
+  geom_violin()
+```
+
+```{r}
+airbnb_df %>% 
+  ggplot(aes(price, number_of_reviews)) + 
+  geom_point() + 
+  theme_minimal()
+```
+
+
+```{r}
+airbnb_df %>% 
+  dplyr::mutate(review_rate_number = as.factor(review_rate_number)) %>%
+  ggplot(aes(review_rate_number, price, color = neighbourhood_group)) + 
+  geom_violin() + 
+  theme_minimal()
+```
+
+## Session Info 
+
+```{r}
+sessionInfo()
+```
