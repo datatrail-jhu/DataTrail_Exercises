@@ -1,0 +1,84 @@
+---
+title: "Final Data Project"
+author: "DataTrail Team"
+output: html_notebook
+---
+
+# Final Data Project
+
+## The goal of this analysis
+
+<Write here what the goal of this analysis is. What question are we trying to answer?> 
+## Set up 
+
+Load packages you will need for this analysis. 
+
+```{r}
+## you can add more, or change...these are suggestions
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+## Set up directories
+
+Set up the directories you will need. 
+
+```{r}
+if (!dir.exists("data")) {
+  dir.create("data")
+}
+if (!dir.exists("results")) {
+  dir.create("results")
+}
+```
+
+
+## Get the data 
+
+<Write here a bit about this dataset and put a link to where it is from> 
+
+```{r}
+# Read in your dataset(s)
+```
+
+Explore your data here
+
+```{r}
+
+```
+
+## Cleaning the data
+
+
+```{r}
+
+```
+
+## Plot the data! 
+
+```{r}
+ggplot(aes(VARIABLE)) + 
+  geom_point() 
+```
+
+## Get the stats 
+
+
+### Conclusion 
+
+Write up your thoughts about this data science project here and answer the following questions: 
+
+- What did you find out in regards to your original question? 
+- What exceptions or caveats do you have in regards to your analysis you did? 
+- What follow up questions do you have? 
+
+## Print out session info
+
+Session info is a good thing to print out at the end of your notebooks so that you (and other folks) referencing your notebooks know what software versions and libraries you used to run the notebook.
+
+```{r}
+sessionInfo()
+```
