@@ -10,6 +10,8 @@ output: html_notebook
 
 To complete this project you’ll need to do a few things within this file. As you go through the notebook, you will have further instruction on how to complete these objectives.
 
+Be sure [you have followed the steps described in the previous chapter](https://datatrail-jhu.github.io/DataTrail/google-documents.html) and have your Googlesheet with Leanpub data prepared and ready.
+
 1. Go through this notebook, reading along.
 
 2. Fill in empty or incomplete code chunks when prompted to do so.
