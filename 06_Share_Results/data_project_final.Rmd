@@ -6,6 +6,25 @@ output: html_notebook
 
 # Final Data Project
 
+### Your objectives!
+
+To complete this project there are a few requirements you will need to fulfill. Remember that you are not on your own for this project! Data science is done best as a community, so please ask others (and instructors) questions you have when you get stuck!
+
+1. Clearly state the data science question and goal for the analysis you are embarking on.
+
+2. This project should be completely uploaded and up to date on GitHub. Follow the steps in `Pushing and Pulling Changes` chapter for how to git add, commit, and push the changes you have done.
+
+3. Follow good organization principles -- you should at least have 2 folders: a `results` folder and a `data` folder. 4. 4. You should also have a README
+
+5. Make a resulting plot that you save to a file.
+
+6. Write up your final observations in regards to your original question. Note that some data science projects end with "This isn't what I thought it would be" or "that's strange" or "I think this is leading into another question I would need to investigate". Whatever your observations may be, write them up in your main R Markdown.
+
+7. When you feel your analysis is ready for review, send your instructor the GitHub link to your project so they can review it.
+
+8. Pat yourself on the back for all this work! You are a data scientist!
+
+
 ## The goal of this analysis
 
 <Write here what the goal of this analysis is. What question are we trying to answer?> 
