@@ -139,14 +139,24 @@ Two things we can notice here. One is that really `life_expectancy_at_birth_fema
 
 Another is that they are using two different items to note missing data `-99` and `...` For R to deal with missing data appropriately we will want to change these to be `NA`. This is also true for the `co2_emission_estimates_million_tons_tons_per_capita` variable which is being considered by R as a numeric value (based on how it is labeled as `dbl`).
 
-Let's start with the missing data. To replace these `-99` and `...` we can use the function: `naniar::replace_with_na()`. We'll want to do this for every variable, not just the one we looked at above. 
+Let's start with some of the missing data. To replace these `-99`(the numeric version) and `"-99"` (the character version) and `.../...` , we can use the function: `naniar::replace_with_na()`. We'll want to do this for every variable, not just the one we looked at above.  When we replace each of these they will have a single `NA` value even though we have two values for the observations where we have numeric values.
 
 ```{r}
 un_df <- naniar::replace_with_na_all(un_df,
-                                     condition = ~.x %in% c(-99, "-99", "..."))
+                                     condition = ~.x %in% c(-99, "-99", ".../..."))
 ```
 
-Let's split the `life_expectancy_at_birth_females_males_years` column up into two columns so we can more appropriately deal with these data. To do this we can use a handy function called `tidyr::separate()`. Call the new resulting columns `life_expectancy_at_birth_females` and `life_expectancy_at_birth_males` by specifying this with the `into` argument.
+
+Let's check to see if this did what we expected. We can use the count function to look at the unique values for each of these variables. We can pipe the output in a large print function to see all of the values.
+
+```{r}
+count(un_df, life_expectancy_at_birth_females_males_years) %>% print(n = 211) 
+count(un_df, co2_emission_estimates_million_tons_tons_per_capita) %>% print(n = 211)
+```
+
+Great, It looks like we have replaced the the `-99` ,`"-99"`, and `.../...` values. It also looks like we don't have any values like this `.../49.6` or this `.../56.2`. If we did we would need to do something a little fancier (possibly with the `stringr` package) but for now we don't need to worry about that. It is always good to check your data though!
+
+Let's split the column `life_expectancy_at_birth_females_males_years`  into two columns so we can more appropriately deal with these data. To do this we can use a handy function called `tidyr::separate()`. Call the new resulting columns `"life_expectancy_at_birth_females"` and `"life_expectancy_at_birth_males"` by specifying this with the `into` argument. We can specify that we want to separate by the `/` symbol by using the `sep` argument. For observations where we have an `NA` value, both new columns will recieve an `NA`.
 
 ```{r}
 
