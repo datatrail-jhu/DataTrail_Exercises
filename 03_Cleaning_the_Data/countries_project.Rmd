@@ -47,7 +47,7 @@ library(tidyr)
 
 ## Set up directories
 
-Here we are going to make a data directory if it doesn't already exist. 
+Here we are going to make a directory or folder called data, if it doesn't already exist. No need for you to change this code. 
 
 ```{r}
 if (!dir.exists("data")) {
@@ -58,9 +58,10 @@ if (!dir.exists("data")) {
 
 ## Get the data 
 
-We are going to use two different country datasets from Kaggle.
+We are going to use two different country datasets from [Kaggle](https://www.kaggle.com/).
 
 This UN data-derived dataset with various stats about different countries: https://www.kaggle.com/datasets/sudalairajkumar/undata-country-profiles
+
 The resulting CSV file is called `country_profile_variables.csv`.
 
 This literacy dataset with statistics about literacy across countries
@@ -68,7 +69,7 @@ https://www.kaggle.com/datasets/programmerrdai/literacy
 
 The resulting CSV file is called `cross-country-literacy-rates`.
 
-Both datasets have been downloaded and placed in the `data` and `raw` folder. Use readr::read_csv function to reach each dataset in. Call the first one `un_df` and the second `literacy_df`. 
+Both datasets have been downloaded and placed in the `raw` folder (also called a directory) within the `data` folder. Use `readr::read_csv` function to read each dataset into R. Call the first one `un_df` and the second `literacy_df`. 
 
 ```{r}
 # Read in the dataset for un_df
@@ -84,6 +85,7 @@ Use functions we have discussed previously to see what variables are in both `un
 ```{r}
 
 ```
+
 ```{r}
 
 ```
