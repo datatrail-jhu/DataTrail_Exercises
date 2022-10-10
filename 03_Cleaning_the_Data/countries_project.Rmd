@@ -245,18 +245,21 @@ lit_plot <- plotting_df %>%
 
 lit_plot
 ```
+
 This looks like literacy and life expectancy are positively related to each other. In other words, in countries with higher literacy rates, there's also a longer life expectancy. 
 
 In this plot we've color coded by the year that the literacy data was recorded. This way we are aware of how differences in years might influence this relationship. 
 
 But! Really, we've lumped together `female` and `male` data points with each country which isn't really the right way to treat this data. Let's use `facet_wrap()` to make this one plot into two separate plots. 
 
+We can also add a trendline to get a better sense of how these two variables relate to one another using `geom_smooth()`. 
+
 
 ```{r}
-lit_plot + facet_wrap(~gender)
+lit_plot + facet_wrap(~gender) + geom_smooth()
 ```
 
-It looks like this relationship is stable across `male` and `female`. Let's get a stat on it. 
+It looks like this relationship is stable across `male` and `female`. It also looks like a stronger relationship for the life expectancy and literacy values in the middle to lower range. Let's get a stat on the relationship. 
 
 ## Get the stats 
 
