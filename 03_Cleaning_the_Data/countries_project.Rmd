@@ -92,7 +92,17 @@ Use functions we have discussed previously to see what variables are in both `un
 
 ### Cleaning the datasets 
 
-You'll notice both datasets have pretty messy looking column names that are annoying to use. Use the `janitor::clean_names()` function to clean these up. 
+You'll notice both datasets have pretty messy looking column names that are annoying to use. Use the `janitor::clean_names()` function to clean these up. Don't forget to reasign the data objects!
+
+```{r}
+
+```
+
+Now take a look at the variable names again to see how they have changed.
+
+```{r}
+
+```
 
 ```{r}
 
@@ -101,7 +111,7 @@ You'll notice both datasets have pretty messy looking column names that are anno
 #### Clean up literacy_df
 
 The `literacy_df` data frame shows multiple rows for each country. For this analysis, let's only keep the latest year recorded for each country. 
-You can use the `arrange()` or `distinct()`, and `filter()` functions to do this. 
+You can use the `arrange()` and `desc()` functions to first order the data by the latest year recorded for each country.  Then use the `distinct()` function to keep only rows from the lastest year for each country by essentially selecting for the first mention of each country. Hint you will need to use an argument within `distinct()` to not lose the other columns. (Again don't forget to reassign your data objects to keep your work.)
 
 ```{r}
 
@@ -110,17 +120,24 @@ You can use the `arrange()` or `distinct()`, and `filter()` functions to do this
 
 #### Clean up un_df
 
-There's a number of variables in `un_df` that are numeric but are being treated as a character. 
+There's a number of variables in `un_df` that are numeric but are being treated as a character. Use the `glimpse()` function of the `dplyr` package to take a look at the variables to determine how often there are numeric values that are being treated as a character.
 
-Let's take a look at `life_expectancy_at_birth_females_males_years` as an example. Use the `head()` function and print out the first 10 rows to see.  
+Let's take a closer look at `life_expectancy_at_birth_females_males_years` as an example. Use the `head()` function and print out the first 10 rows to see.  
 
 ```{r}
 
 ```
 
-Two things we can notice here. One is that really it looks like this is two variables, one for female and one for male. We'll want to split this into two columns. 
+Let's also take a closer look at `co2_emission_estimates_million_tons_tons_per_capita` as an example. Use the `count()` function to print out the unique values and how often they occur.  
 
-Another is that they are using two different items to note missing data `-99` and `...` For R to deal with missing data appopriately we will want to change these to be `NA`. 
+```{r}
+
+
+```
+
+Two things we can notice here. One is that really `life_expectancy_at_birth_females_males_years` looks like it is two variables, one for female and one for male. We'll want to split this into two columns. 
+
+Another is that they are using two different items to note missing data `-99` and `...` For R to deal with missing data appropriately we will want to change these to be `NA`. This is also true for the `co2_emission_estimates_million_tons_tons_per_capita` variable which is being considered by R as a numeric value (based on how it is labeled as `dbl`).
 
 Let's start with the missing data. To replace these `-99` and `...` we can use the function: `naniar::replace_with_na()`. We'll want to do this for every variable, not just the one we looked at above. 
 
