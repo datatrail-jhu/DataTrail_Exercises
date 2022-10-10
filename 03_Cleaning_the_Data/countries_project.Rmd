@@ -111,7 +111,7 @@ Now take a look at the variable names again to see how they have changed.
 #### Clean up literacy_df
 
 The `literacy_df` data frame shows multiple rows for each country. For this analysis, let's only keep the latest year recorded for each country. 
-You can use the `arrange()` and `desc()` functions to first order the data by the latest year recorded for each country.  Then use the `distinct()` function to keep only rows from the lastest year for each country by essentially selecting for the first mention of each country. Hint you will need to use an argument within `distinct()` to not lose the other columns. (Again don't forget to reassign your data objects to keep your work.)
+You can use  `arrange()` and `desc()` (or a minus sign) to first order the data by the latest year recorded for each country.  Then use the `distinct()` function to keep only rows from the lastest year for each country by essentially selecting for the first mention of each country. Hint you will need to use an argument within `distinct()` to not lose the other columns. (Again don't forget to reassign your data objects to keep your work.)
 
 ```{r}
 
@@ -128,7 +128,7 @@ Let's take a closer look at `life_expectancy_at_birth_females_males_years` as an
 
 ```
 
-Let's also take a closer look at `co2_emission_estimates_million_tons_tons_per_capita` as an example. Use the `count()` function to print out the unique values and how often they occur.  
+Let's also take a closer look at `co2_emission_estimates_million_tons_tons_per_capita` as an example.   
 
 ```{r}
 
@@ -147,16 +147,15 @@ un_df <- naniar::replace_with_na_all(un_df,
 ```
 
 
-Let's check to see if this did what we expected. We can use the count function to look at the unique values for each of these variables. We can pipe the output in a large print function to see all of the values.
+Let's check to see if this did what we expected. 
 
 ```{r}
-count(un_df, life_expectancy_at_birth_females_males_years) %>% print(n = 211) 
-count(un_df, co2_emission_estimates_million_tons_tons_per_capita) %>% print(n = 211)
+
 ```
 
-Great, It looks like we have replaced the the `-99` ,`"-99"`, and `.../...` values. It also looks like we don't have any values like this `.../49.6` or this `.../56.2`. If we did we would need to do something a little fancier (possibly with the `stringr` package) but for now we don't need to worry about that. It is always good to check your data though!
+Great, hopefully it looks like we have replaced the the `-99` ,`"-99"`, and `.../...` values. It also looks like we don't have any values like this `.../49.6` or this `56.2/...`. If we did we would need to do something a little fancier (possibly with the `stringr` package) but for now we don't need to worry about that. It is always good to check your data though!
 
-Let's split the column `life_expectancy_at_birth_females_males_years`  into two columns so we can more appropriately deal with these data. To do this we can use a handy function called `tidyr::separate()`. Call the new resulting columns `"life_expectancy_at_birth_females"` and `"life_expectancy_at_birth_males"` by specifying this with the `into` argument. We can specify that we want to separate by the `/` symbol by using the `sep` argument. For observations where we have an `NA` value, both new columns will recieve an `NA`.
+Let's split the column `life_expectancy_at_birth_females_males_years`  into two columns so we can more appropriately deal with these data. To do this we can use a handy function called `tidyr::separate()`. Call the new resulting columns `"life_expectancy_at_birth_females"` and `"life_expectancy_at_birth_males"` by specifying this with the `into` argument. We can specify that we want to separate by the `/` symbol by using the `sep` argument. For observations where we have an `NA` value, both new columns will receive an `NA`.
 
 ```{r}
 
@@ -202,7 +201,7 @@ Call this new data frame `countries_df`.
 
 ```
 
-We will be returning to this dataset in a future project. Save `countries_df` to an RDS file here. Save this file to the `data` folder and name it "countries_df.rds".
+We will be returning to this dataset in a future project. Save `countries_df` to an RDS file here. Save this file to the `data` folder and name it `countries_df.rds`.
 
 ```{r}
 
@@ -220,7 +219,7 @@ In this same step, let's also shorten the column name `literacy_rates_world_bank
 
 ```
 
-Now, let's reshape this data so that it is longer. We will want a column for `gender` and one column for `life_expectancy`. Use the `tidyr::gather()` function. 
+Now, let's reshape this data so that it is longer. We will want to modify the `life_expectancy_at_birth_females` and `life_expectancy_at_birth_males` variables so that we instead have one column for `life_expectancy` values and one for `gender` which specifies what column the values originally came from. We want to keep `country`, `year`, `literacy_rates`. Use the `pivot_longer` function. 
 
 ```{r}
 
