@@ -47,7 +47,7 @@ library(tidyr)
 
 ## Set up directories
 
-Here we are going to make a data directory if it doesn't already exist. 
+Here we are going to make a directory or folder called `data`, if it doesn't already exist. No need for you to change this code. 
 
 ```{r}
 if (!dir.exists("data")) {
@@ -58,9 +58,10 @@ if (!dir.exists("data")) {
 
 ## Get the data 
 
-We are going to use two different country datasets from Kaggle.
+We are going to use two different country datasets from [Kaggle](https://www.kaggle.com/).
 
 This UN data-derived dataset with various stats about different countries: https://www.kaggle.com/datasets/sudalairajkumar/undata-country-profiles
+
 The resulting CSV file is called `country_profile_variables.csv`.
 
 This literacy dataset with statistics about literacy across countries
@@ -68,7 +69,7 @@ https://www.kaggle.com/datasets/programmerrdai/literacy
 
 The resulting CSV file is called `cross-country-literacy-rates`.
 
-Both datasets have been downloaded and placed in the `data` and `raw` folder. Use readr::read_csv function to reach each dataset in. Call the first one `un_df` and the second `literacy_df`. 
+Both datasets have been downloaded and placed in the `raw` folder (also called a directory) within the `data` folder of the `03_Cleaning_the_Data` project folder. Use `readr::read_csv()` function to read each dataset into R. Call the first one `un_df` and the second `literacy_df`. 
 
 ```{r}
 # Read in the dataset for un_df
@@ -84,13 +85,24 @@ Use functions we have discussed previously to see what variables are in both `un
 ```{r}
 
 ```
+
 ```{r}
 
 ```
 
 ### Cleaning the datasets 
 
-You'll notice both datasets have pretty messy looking column names that are annoying to use. Use the `janitor::clean_names()` function to clean these up. 
+You'll notice both datasets have pretty messy looking column names that are annoying to use. Use the `janitor::clean_names()` function to clean these up. Don't forget to reassign the data objects!
+
+```{r}
+
+```
+
+Now take a look at the variable names again to see how they have changed.
+
+```{r}
+
+```
 
 ```{r}
 
@@ -99,7 +111,7 @@ You'll notice both datasets have pretty messy looking column names that are anno
 #### Clean up literacy_df
 
 The `literacy_df` data frame shows multiple rows for each country. For this analysis, let's only keep the latest year recorded for each country. 
-You can use the `arrange()` and `distinct()` functions to do this. 
+You can use  `arrange()` and `desc()` (or a minus sign) to first order the data by the latest year recorded for each country.  Then use the `distinct()` function to keep only rows from the lastest year for each country by essentially selecting for the first mention of each country. Hint you will need to use an argument within `distinct()` to not lose the other columns. (Again don't forget to reassign your data objects to keep your work.)
 
 ```{r}
 
@@ -108,26 +120,42 @@ You can use the `arrange()` and `distinct()` functions to do this.
 
 #### Clean up un_df
 
-There's a number of variables in `un_df` that are numeric but are being treated as a character. 
+There's a number of variables in `un_df` that are numeric but are being treated as a character. Use the `glimpse()` function of the `dplyr` package to take a look at the variables to determine how often there are numeric values that are being treated as a character.
 
-Let's take a look at `life_expectancy_at_birth_females_males_years` as an example. Use the `head()` function and print out the first 10 rows to see.  
+Let's take a closer look at `life_expectancy_at_birth_females_males_years` as an example. Use the `head()` function and print out the first 10 rows to see.  
 
 ```{r}
 
 ```
 
-Two things we can notice here. One is that really it looks like this is two variables, one for female and one for male. We'll want to split this into two columns. 
+Let's also take a closer look at `co2_emission_estimates_million_tons_tons_per_capita` as an example.   
 
-Another is that they are using two different items to note missing data `-99` and `...` For R to deal with missing data appopriately we will want to change these to be `NA`. 
+```{r}
 
-Let's start with the missing data. To replace these `-99` and `...` we can use the function: `naniar::replace_with_na()`. We'll want to do this for every variable, not just the one we looked at above. 
+
+```
+
+Two things we can notice here. One is that really `life_expectancy_at_birth_females_males_years` looks like it is two variables, one for female and one for male. We'll want to split this into two columns. 
+
+Another is that they are using two different items to note missing data `-99` and `...` For R to deal with missing data appropriately we will want to change these to be `NA`. This is also true for the `co2_emission_estimates_million_tons_tons_per_capita` variable which is being considered by R as a numeric value (based on how it is labeled as `dbl`).
+
+Let's start with some of the missing data. To replace these `-99`(the numeric version) and `"-99"` (the character version) and `.../...` , we can use the function: `naniar::replace_with_na()`. We'll want to do this for every variable, not just the one we looked at above.  When we replace each of these they will have a single `NA` value even though we have two values for the observations where we have numeric values.
 
 ```{r}
 un_df <- naniar::replace_with_na_all(un_df,
-                                     condition = ~.x %in% c(-99, "-99", "..."))
+                                     condition = ~.x %in% c(-99, "-99", ".../..."))
 ```
 
-Let's split the `life_expectancy_at_birth_females_males_years` column up into two columns so we can more appropriately deal with these data. To do this we can use a handy function called `tidyr::separate()`. Call the new resulting columns `life_expectancy_at_birth_females` and `life_expectancy_at_birth_males` by specifying this with the `into` argument.
+
+Let's check to see if this did what we expected. 
+
+```{r}
+
+```
+
+Great, hopefully it looks like we have replaced the the `-99` ,`"-99"`, and `.../...` values. It also looks like we don't have any values like this `.../49.6` or this `56.2/...`. If we did we would need to do something a little fancier (possibly with the `stringr` package) but for now we don't need to worry about that. It is always good to check your data though!
+
+Let's split the column `life_expectancy_at_birth_females_males_years`  into two columns so we can more appropriately deal with these data. To do this we can use a handy function called `tidyr::separate()`. Call the new resulting columns `"life_expectancy_at_birth_females"` and `"life_expectancy_at_birth_males"` by specifying this with the `into` argument. We can specify that we want to separate by the `/` symbol by using the `sep` argument. For observations where we have an `NA` value, both new columns will receive an `NA`.
 
 ```{r}
 
@@ -173,7 +201,7 @@ Call this new data frame `countries_df`.
 
 ```
 
-We will be returning to this dataset in a future project. Save `countries_df` to an RDS file here. Save this file to the `data` folder and name it "countries_df.rds".
+We will be returning to this dataset in a future project. Save `countries_df` to an RDS file here. Save this file to the `data` folder and name it `countries_df.rds`.
 
 ```{r}
 
@@ -191,7 +219,7 @@ In this same step, let's also shorten the column name `literacy_rates_world_bank
 
 ```
 
-Now, let's reshape this data so that it is longer. We will want a column for `gender` and one column for `life_expectancy`. Use the `tidyr::gather()` function. 
+Now, let's reshape this data so that it is longer. We will want to modify the `life_expectancy_at_birth_females` and `life_expectancy_at_birth_males` variables so that we instead have one column for `life_expectancy` values and one for `gender` which specifies what column the values originally came from. We want to keep `country`, `year`, `literacy_rates`. Use the `pivot_longer` function. 
 
 ```{r}
 
@@ -217,18 +245,21 @@ lit_plot <- plotting_df %>%
 
 lit_plot
 ```
+
 This looks like literacy and life expectancy are positively related to each other. In other words, in countries with higher literacy rates, there's also a longer life expectancy. 
 
 In this plot we've color coded by the year that the literacy data was recorded. This way we are aware of how differences in years might influence this relationship. 
 
 But! Really, we've lumped together `female` and `male` data points with each country which isn't really the right way to treat this data. Let's use `facet_wrap()` to make this one plot into two separate plots. 
 
+We can also add a trendline to get a better sense of how these two variables relate to one another using `geom_smooth()`. 
+
 
 ```{r}
-lit_plot + facet_wrap(~gender)
+lit_plot + facet_wrap(~gender) + geom_smooth()
 ```
 
-It looks like this relationship is stable across `male` and `female`. Let's get a stat on it. 
+It looks like this relationship is stable across `male` and `female`. It also looks like a stronger relationship for the life expectancy and literacy values in the middle to lower range. Let's get a stat on the relationship. 
 
 ## Get the stats 
 
