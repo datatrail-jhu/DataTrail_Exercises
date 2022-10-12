@@ -92,7 +92,7 @@ Use functions we have discussed previously to see what variables are in both `un
 
 ### Cleaning the datasets 
 
-You'll notice both datasets have pretty messy looking column names that are annoying to use. Use the `janitor::clean_names()` function to clean these up. Don't forget to reasign the data objects!
+You'll notice both datasets have pretty messy looking column names that are annoying to use. Use the `janitor::clean_names()` function to clean these up. Don't forget to reassign the data objects!
 
 ```{r}
 
