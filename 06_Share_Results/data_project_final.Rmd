@@ -24,6 +24,21 @@ To complete this project there are a few requirements you will need to fulfill. 
 
 8. Pat yourself on the back for all this work! You are a data scientist!
 
+## Data
+
+For this project you will use whatever data you choose.
+
+Options for places to find data are:
+
+- https://www.kaggle.com/datasets
+- https://shiny.rstudio.com/gallery/tidy-tuesday.html
+- https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/00Index.html
+(This is the data that comes with R - you can load them using `datasets::` and pressing tab in RStudio to see the names of the datasets - for example `datasets::ability.cov` will load the ability dataset.)
+You are not limited to these options for finding your data.
+
+<Write where you got your data and provide the link if applicable.>
+
+<Describe how the data was originally created. If this is data that is part of `datasets` you can use the `?` like so: ` ?datasets::AirPassengers` to see information about the datasets.Otherwise provide a summary based on the source of the data.>
 
 ## The goal of this analysis
 
@@ -57,13 +72,12 @@ if (!dir.exists("results")) {
 
 ## Get the data 
 
-<Write here a bit about this dataset and put a link to where it is from> 
 
 ```{r}
 # Read in your dataset(s)
 ```
 
-Explore your data here
+Explore your data here and describe what variables and samples you have.
 
 ```{r}
 
