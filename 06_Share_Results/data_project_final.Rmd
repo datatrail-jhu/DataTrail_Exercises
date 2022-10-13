@@ -6,40 +6,6 @@ output: html_notebook
 
 # Final Data Project
 
-### Your objectives!
-
-To complete this project there are a few requirements you will need to fulfill. Remember that you are not on your own for this project! Data science is done best as a community, so please ask others (and instructors) questions you have when you get stuck!
-
-1. Clearly state the data science question and goal for the analysis you are embarking on.
-
-2. This project should be completely uploaded and up to date on GitHub. Follow the steps in `Pushing and Pulling Changes` chapter for how to git add, commit, and push the changes you have done.
-
-3. Follow good organization principles -- you should at least have 2 folders: a `results` folder and a `data` folder. 4. 4. You should also have a README
-
-5. Make a resulting plot that you save to a file.
-
-6. Write up your final observations in regards to your original question. Note that some data science projects end with "This isn't what I thought it would be" or "that's strange" or "I think this is leading into another question I would need to investigate". Whatever your observations may be, write them up in your main R Markdown.
-
-7. When you feel your analysis is ready for review, send your instructor the GitHub link to your project so they can review it.
-
-8. Pat yourself on the back for all this work! You are a data scientist!
-
-## Data
-
-For this project you will use whatever data you choose.
-
-Options for places to find data are:
-
-- https://www.kaggle.com/datasets
-- https://shiny.rstudio.com/gallery/tidy-tuesday.html
-- https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/00Index.html
-(This is the data that comes with R - you can load them using `datasets::` and pressing tab in RStudio to see the names of the datasets - for example `datasets::ability.cov` will load the ability dataset.)
-You are not limited to these options for finding your data.
-
-<Write where you got your data and provide the link if applicable.>
-
-<Describe how the data was originally created. If this is data that is part of `datasets` you can use the `?` like so: ` ?datasets::AirPassengers` to see information about the datasets.Otherwise provide a summary based on the source of the data.>
-
 ## The goal of this analysis
 
 <Write here what the goal of this analysis is. What question are we trying to answer?> 
@@ -72,12 +38,13 @@ if (!dir.exists("results")) {
 
 ## Get the data 
 
+<Write here a bit about this dataset and put a link to where it is from> 
 
 ```{r}
 # Read in your dataset(s)
 ```
 
-Explore your data here and describe what variables and samples you have.
+Explore your data here
 
 ```{r}
 

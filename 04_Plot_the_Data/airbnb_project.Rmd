@@ -6,33 +6,11 @@ output: html_document
 
 # Data Visualization Project
 
-## Objectives for this project
-
-To complete this project you’ll need to do a few things within this file. As you go through the notebook, you will have further instruction on how to complete these objectives.
-
-1. Go through this notebook, reading along.
-
-2. Fill in empty or incomplete code chunks when prompted to do so.
-
-3. Run each code chunk as you come across it by clicking the tiny green triangles at the right of each chunk. You should see the code chunks print out various output when you do this.
-
-4. At the very top of this file, put your own name in the `author:` place. Currently it says `"DataTrail Team"`. Be sure to put your name in quotes.
-
-5. In the `Conclusions` section, write up responses to each of these questions posed here.
-
-6. When you are satisfied with what you've written and added to this document you'll need to save it. In the menu, go to `File` > `Save`. Now the `nb.html` output resulting file will have your new output saved to it.
-
-7. Open up the resulting `airbnb_project.nb.html` file and click `View in Web Browser`. Does it look good to you? Did all the changes appear here as you expected.
-
-8. Upload your `Rmd` and your `nb.html` files to your assignment folder (this is something that will be dependent on what your instructors have told you -- or if you are taking this on your own, just collect these projects in one spot, preferably a Google Drive)!
-
-7. Pat yourself on the back for finishing this project!
-
 ## The goal of this analysis
 
-<Write here what the goal of this analysis is. What question are we trying to answer?> 
+<Write here what the goal of this analysis is. What question are we trying to answer?>
 
-## Set up 
+## Set up
 
 Let's load these packages for use. Add or subtract from this list as you see fit.
 
@@ -48,7 +26,7 @@ library(readr)
 
 ## Set up directories
 
-Here we are going to make a data directory if it doesn't already exist. 
+Here we are going to make a `data` directory if it doesn't already exist.
 
 ```{r}
 if (!dir.exists("data")) {
@@ -56,136 +34,134 @@ if (!dir.exists("data")) {
 }
 ```
 
-## Get the data 
+## Get the data
 
-The data we'll be using for this part of the project are about irbnbs and can be downloaded from here: https://www.kaggle.com/datasets/arianazmoudeh/airbnbopendata
+The data we'll be using for this part of the project are about Airbnbs and can be downloaded from here: https://www.kaggle.com/datasets/arianazmoudeh/airbnbopendata
 
-First, we'll read the data in from our `data/raw` directory. Use the `read_csv` function to do this. Call this new data frame `airbnb_df`. 
+First, we'll read the data in from our `data/raw` directory. Use the `read_csv` function to do this. Call this new data frame `airbnb_df`.
 
 ```{r}
-
+airbnb_df <- readr::read_csv(file.path("data", "raw", "Airbnb_Open_Data.csv"))
 ```
 
-Use this chunk to do some exploring of this dataset to get an idea of what kind of information is here. 
+Use this chunk to do some exploring of this dataset to get an idea of what kind of information is here.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-### Clean the data 
+### Clean the data
 
-Use the `janitor::clean_names` function to clean up some of these column names 
+Use the `janitor::clean_names` function to clean up some of these column names.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
 ### Fix `neighbourhood_group` variable
 
-Take a look at the `neighbourhood_group` variable. Try to summarize how many different neighborhood groups there are using the `summary()` function.. 
+Take a look at the `neighbourhood_group` variable. Try to summarize how many different neighborhood groups there are using the `summary()` function.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-You will find that this variable is a character, so we will need to coerce it to a factor to get meaningful information about the groups here. Thus run the `summary` function on a factor version of the `neighborhood_group` data, but don't yet change the variable to be a factor.
+You will find that this variable is a character, so we will need to check it as a factor to get meaningful information about the groups here. Thus run the `summary` function on a factor version of the `neighborhood_group` data, but don't yet change the variable to be a factor.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-You'll notice there's some typos here `brookln` and `manhatan`. Fix these typos in this dataset by whatever method you find most intuitive. After you have fixed the typos, make sure that you coerce `neighbourhood_group` as a factor. 
+You'll notice there's some typos here `brookln` and `manhatan`. Fix these typos in this dataset by whatever method you find most intuitive. After you have fixed the typos, make sure that you coerce `neighbourhood_group` as a factor.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-Re-run `summary()` on the `neighbourhood_group` to see if your code successfully fixed these misspellings. 
+Re-run `summary()` on the `neighbourhood_group` to see if your code successfully fixed these misspellings.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
 ### Fix numeric data
 
-The `service_fee` and `price` columns are really numeric data but are being treated as characters because there are `$` and `,` included. 
+The `service_fee` and `price` columns are really numeric data but are being treated as characters because there are `$` and `,` included.
 
-We'll need to get rid of these. **Hint** use this kind of code: 
-`stringr::str_remove(service_fee, "\\$|,")` within a mutate to get rid of the dollar signs. After you get rid of the dollar signs from both `service_fee` and `price`, coerce both of these variables to be numeric. 
+We'll need to get rid of these. **Hint** use this kind of code:
+`stringr::str_remove(service_fee, "\\$|,")` within a mutate to get rid of the dollar signs. After you get rid of the dollar signs from both `service_fee` and `price`, coerce both of these variables to be numeric.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-Use summary to see if `price` and `service_fee` are now appropriately numeric data. 
+Use summary to see if `price` and `service_fee` are now appropriately numeric data.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
 ## Plot the data
 
-Let's make a series of plots that explore how the price of an airbnb may be related to the other variables in this set. 
+Let's make a series of plots that explore how the price of an airbnb may be related to the other variables in this set.
 
 To refresh your memory, a basic ggplot code looks like this:
 
 ```
-DATA_FRAME %>% 
-  ggplot(aes(VARIABLE, VARIABLE, color = OPTIONAL_VARIABLE)) + 
+DATA_FRAME %>%
+  ggplot(aes(VARIABLE, VARIABLE, color = OPTIONAL_VARIABLE)) +
   geom_PLOT_TYPE()
 ```
 
-We recommend keeping the ggplot2 cheatsheet handy while you are going through this project: 
+We recommend keeping the ggplot2 cheatsheet handy while you are going through this project:
 https://www.rstudio.com/resources/cheatsheets/
 
-Using what we have learned about ggplot2, make a plots that explore the price of the airbnb and if it is related to any of the variables in the `airbnb_df`. 
+### Scatter plot
 
-### Scatter plot 
+Now make a scatter plot that explores if `price` is related to one of the other numeric variables in the dataset.
 
-Now make a scatter plot that explores if `price` is related to one of the other numeric variables in the dataset. 
-
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-### Violin plot 
+### Violin plot
 
-Make a violin plot for the price distribution of different neighborhood groups. 
+Make a violin plot for the price distribution of different neighborhood groups.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-### Barplot 
+### Barplot
 
-Now make a plot that explores if there's a particular `room_type` that has a higher price than others. You may choose to summarize the `price` by the `room_type`. Hint: you may need to `group_by` a variable.   
+Now make a plot that explores if there's a particular `room_type` that has a higher price than others. You may choose to summarize the `price` by the `room_type`.  Hint: you may need to `group_by` a variable.    
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-### Your choice plot! 
+### Your choice plot!
 
-Make one more plot that is completely your choice about what variables you'd like to see the relationships of. 
+Make one more plot that is completely your choice about what variables you'd like to see the relationships of.
 
 See http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html for inspiration and ideas.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-### Conclusion 
+### Conclusion
 
-Write up your thoughts about this data science project here and answer the following questions: 
+Write up your thoughts about this data science project here and answer the following questions:
 
-- What did we find out about our questions? 
-- How did we explore our questions? 
-- What did our explorations show us? 
-- What follow up data science questions arise for you regarding this candy dataset now that we've explored it some? 
+- What did we find out about our questions?
+- How did we explore our questions?
+- What did our explorations show us?
+- What follow up data science questions arise for you regarding this candy dataset now that we've explored it some?
 
 ## Print out session info
 

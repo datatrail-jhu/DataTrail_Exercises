@@ -6,35 +6,13 @@ output: html_notebook
 
 # Stats Project
 
-## Objectives for this project
-
-To complete this project you’ll need to do a few things within this file. As you go through the notebook, you will have further instruction on how to complete these objectives.
-
-1. Go through this notebook, reading along.
-
-2. Fill in empty or incomplete code chunks when prompted to do so.
-
-3. Run each code chunk as you come across it by clicking the tiny green triangles at the right of each chunk. You should see the code chunks print out various output when you do this.
-
-4. At the very top of this file, put your own name in the `author:` place. Currently it says `"DataTrail Team"`. Be sure to put your name in quotes.
-
-5. In the `Conclusions` section, write up responses to each of these questions posed here.
-
-6. When you are satisfied with what you've written and added to this document you'll need to save it. In the menu, go to `File` > `Save`. Now the `nb.html` output resulting file will have your new output saved to it.
-
-7. Open up the resulting `countries_stats.nb.html` file and click `View in Web Browser`. Does it look good to you? Did all the changes appear here as you expected.
-
-8. Upload your `Rmd` and your `nb.html` to your assignment folder (this is something that will be dependent on what your instructors have told you -- or if you are taking this on your own, just collect these projects in one spot, preferably a Google Drive)!
-
-9. Pat yourself on the back for finishing this project!
-
 ## The goal of this analysis
 
-<Write here what the goal of this analysis is. What question are we trying to answer?> 
+<Write here what the goal of this analysis is. What question are we trying to answer?>
 
-## Set up 
+## Set up
 
-Let's load these packages for use. 
+Let's load these packages for use.
 
 ```{r}
 ## you can add more, or change...these are suggestions
@@ -49,7 +27,7 @@ library(knitr)
 
 ## Set up directories
 
-Here we are going to make a data directory if it doesn't already exist. 
+Here we are going to make a data directory if it doesn't already exist.
 
 ```{r}
 if (!dir.exists("data")) {
@@ -61,159 +39,148 @@ if (!dir.exists("plots")) {
 ```
 
 
-## Get the data 
+## Get the data
 
-In a previous project in `03_Cleaning_Data`, we cleaned a dataset about countries and saved this to an RDS file. 
-Read in this file from its location in the `03_Cleaning_Data` folder. **Hint** you will need to use a `..` to backout of this current folder and reference the parent folder of `05_Get_Stats`. 
+In a previous project in `03_Cleaning_Data`, we cleaned a dataset about countries and saved this to an RDS file.
+Read in this file from its location in the `03_Cleaning_Data` folder. **Hint** you will need to use a `..` to backout of this current folder and reference the parent folder of `05_Get_Stats`.
 
-```{r}
-
+```{r, solution = TRUE}
+# Read in the dataset for un_df
+### Your code here
 ```
 
-Use functions we have discussed previously to see remind yourself of what vairables are ih `countries_df`. 
+Use functions we have discussed previously to see remind yourself of what vairables are ih `countries_df`.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-### Cleaning the datasets 
+### Cleaning the datasets
 
-We're going to select down to columns we are interested in.  Note that we are also shortening some of the names of these variables so that they fit into graphs more easily. 
+We're going to select down to columns we are interested in .
 
 ```{r}
-countries_df <- countries_df %>% 
-  select(country, 
-         pop = population_in_thousands_2017, 
-         pop_density = population_density_per_km2_2017, 
-         sex_ratio = sex_ratio_m_per_100_f_2017, 
-         gdp = gdp_per_capita_current_us, 
-         labour_force_participation_female_male_pop_percent, 
-         urban_perc = urban_population_percent_of_total_population, 
-         growth_rate = population_growth_rate_average_annual_percent, 
-         fertility = fertility_rate_total_live_births_per_woman, 
-         life_exp_female = life_expectancy_at_birth_females, 
-         life_exp_male =life_expectancy_at_birth_males, 
-         infant_mortality = infant_mortality_rate_per_1000_live_births, 
-         seats_held_women = seats_held_by_women_in_national_parliaments_percent, 
+countries_df <- countries_df %>%
+  select(country,
+         pop = population_in_thousands_2017,
+         pop_density = population_density_per_km2_2017,
+         sex_ratio = sex_ratio_m_per_100_f_2017,
+         gdp = gdp_per_capita_current_us,
+         labour_force_participation_female_male_pop_percent,
+         urban_perc = urban_population_percent_of_total_population,
+         growth_rate = population_growth_rate_average_annual_percent,
+         fertility = fertility_rate_total_live_births_per_woman,
+         life_exp_female = life_expectancy_at_birth_females,
+         life_exp_male =life_expectancy_at_birth_males,
+         infant_mortality = infant_mortality_rate_per_1000_live_births,
+         seats_held_women = seats_held_by_women_in_national_parliaments_percent,
          pop_using_improved_drinking_water_urban_rural_percent)
 ```
 
 
-There are some variables here that need to be split up into two columns much like we did before in `03_Cleaning_the_Data`. 
+There are some variables here that need to be split up into two columns much like we did before in `03_Cleaning_the_Data`.
 
-Repeat the steps we used in that project for the following columns: 
+Repeat the steps we used in that project for the following columns:
 
 `labour_force_participation_female_male_pop_percent`
 `pop_using_improved_drinking_water_urban_rural_percent`     
 
-```{r}
 
+```{r, solution = TRUE}
+### Your code here
 ```
 
-Now all of the data in our set, except for `country`, should be numeric, but it isn't necessarily. Use `mutate_at` but exclude `country` and try to use as.numeric on all the other variables. **Hint** you will need an argument that specifies `vars(-country)` to exclude the `country` column. 
+Now all of the data in our set, except for `country`, should be numeric, but it isn't necessarily. Use `mutate_at` but exclude `country` and try to use as.numeric on all the other variables. **Hint** you will need an argument that specifies `vars(-country)` to exclude the `country` column.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-Save this version of your data to an RDS file in this project. 
+Save this version of your data to an RDS file in this project.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-## Plot the data 
+## Plot the data
 
 Let's explore what kinds of distributions these variables have?
 
-Use ggplot2::geom_density() to do this for at least 5 variables of your choice in `countries_df`. 
+Use ggplot2::geom_density() to do this for at least 5 variables of your choice in `countries_df`.
 
-### Density plot 1 
-
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-### Density plot 2 
-
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-### Density plot 3
-
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-### Density plot 4
-
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-### Density plot 5
+```{r, solution = TRUE}
+### Your code here
+```
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
 ## Run stats  
 
-For this project, we are going to run some exploratory stats. 
- 
-Use the `cor()` function to create a correlation matrix of all the numeric variables in `countries_df`. You still need to use the argument `use = "complete.obs"`. You will also need to exclude the `country` column from this analysis since it is not numeric.  
+For this project, we are going to run some exploratory stats.
 
-Call this correlation matrix `cor_matrix`. 
+Use the `cor()` function to create a correlation matrix of all the numeric variables in `countries_df`
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-Make a table out of this correlation matrix using the `kable()` function. 
+Make a table out of this correlation matrix.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-Use the corrplot::corrplot() function to make a correlation matrix from these data. 
+Use the corrplot::corrplot() function to make a correlation matrix from these data.
 
-```{r}
-plot <- corrplot(cor_matrix, type = "upper", order = "hclust", 
-                 tl.col = "black")
+```{r, solution = TRUE}
+### Your code here
+```
+What do you think about the interaction and groupings of these variables? Is there anything surprising?
+
+Save your plot using the following code.
+
+```{r, solution = TRUE}
+### Your code here
 ```
 
-What do you think about the interaction and groupings of these variables? Is there anything surprising? 
+### Further exploration
 
-Save your plot using the following code. Replace `FILEPATH TO WHERE IT SHOULD BE SAVED` with a file path that will save the plot to our `plots` folder with an appropriate file name. 
-
-
-```{r}
-png(`FILEPATH TO WHERE IT SHOULD BE SAVED`) 
-plot
-dev.off()
-```
-
-### Further exploration 
-
-Based on the plot above, do some statistics and a plot to further explore the relationship of two of the variables in `countries_df`. 
+Based on the plot above, do some statistics and a plot to further explore the relationship of two of the variables in `countries_df`.
 
 ```{r}
-# Make a plot of your choice here 
+# Make a plot of your choice here
 ```
 
 ```{r}
 # Run a statistical test of your choice here
 ```
 
-### Conclusion 
+### Conclusion
 
-Write up your thoughts about this data science project here and answer the following questions: 
+Write up your thoughts about this data science project here and answer the following questions:
 
-- What have you learned about the relationship of the two variables you chose? 
-- Was anything surprising or confusing? 
-- What alternative hypothetical explanations are there for the observed relationships you are seeing? (Remember about third variable problem means you can't say things are causal by correlations) 
-- In a hypothetical future study, what questions would you want to explore and what kind of data would you want to use to do this exploration? 
+- What have you learned about the relationship of the two variables you chose?
+- Was anything surprising or confusing?
+- What alternative hypothetical explanations are there for the observed relationships you are seeing? (Remember about third variable problem means you can't say things are causal by correlations)
+- In a hypothetical future study, what questions would you want to explore and what kind of data would you want to use to do this exploration?
 
 ## Print out session info
 

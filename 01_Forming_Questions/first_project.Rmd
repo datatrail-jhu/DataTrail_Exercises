@@ -6,47 +6,25 @@ output: html_notebook
 
 # First Project
 
-In DataTrail, we will use R Markdown files like this for our data science projects. In this first project, we will try to get comfortable with R Markdown files and go through example basic steps of a data science workflow. 
+In DataTrail, we will use R Markdown files like this for our data science projects. In this first project, we will try to get comfortable with R Markdown files and go through example basic steps of a data science workflow.
 
-## Objectives for this project
+## Forming our data science question
 
-To complete this project you’ll need to do a few things within this file. As you go through the notebook, you will have further instruction on how to complete these objectives.
-
-1. Go through this notebook, reading along. 
-
-2. Run each code chunk as you come across it by clicking the tiny green triangles at the right of each chunk. You should see the code chunks print out various output when you do this.
-
-3. Add a new code chunk to this project that prints out the phrase “I completed my first data science project”. See the very top of this notebook for an example of how to to do this.
-
-4. At the very top of this file, put your own name in the author: place. Currently it says "DataTrail Team". Be sure to put your name in quotes.
-
-5. In the Conclusions section, write up responses to each of these questions posed here.
-
-6. When you are satisfied with what you’ve written and added to this document you’ll need to save it. In the menu, go to File > Save. Now the nb.html output resulting file will have your new output saved to it.
-
-7. Open up the resulting first_project.nb.html file and click View in Web Browser. Does it look good to you? Did all the changes appear here as you expected.
-
-8. Upload your Rmd and your nb.html to your assignment folder (this is something that will be dependent on what your instructors have told you – or if you are taking this on your own, just collect these projects in one spot, preferably a Google Drive)!
-
-9. Pat yourself on the back for finishing up your first project!
-
-## Forming our data science question 
-
-We have defined data science as: 
+We have defined data science as:
 
 > ".. asking a question that can be answered with data, collecting and cleaning the data, studying the data, creating models to help understand and answer the question, and sharing the answer to the question with other people."
 
-For this first project, our question is: 
+For this first project, our question is:
 
-> What's the most popular Halloween candy? 
+> What's the most popular Halloween candy?
 
-One way to answer this question is to collect votes from people where they choose one candy over the other. We have a dataset that we will use to answer this question. 
+One way to answer this question is to collect votes from people where they choose one candy over the other. We have a dataset that we will use to answer this question.
 
 ## About R Markdowns
 
-Before we dive into this project and question, let's get acquainted with what this file is. 
+Before we dive into this project and question, let's get acquainted with what this file is.
 
-This is an R Markdown file. We will often work from R Markdowns for data science projects because they allow us to have code, the results of the code, and our own notes all in one place. 
+This is an R Markdown file. We will often work from R Markdowns for data science projects because they allow us to have code, the results of the code, and our own notes all in one place.
 
 To write code in an R Markdown, we need to put code in code chunks. You can create code chunks
 
@@ -63,16 +41,16 @@ You can click the green arrows at the top right of these code chunks to run an i
 You can create a new code chunk by typing it by hand or by clicking the green +C button at the top of this window.
 
 ```{r}
-# Note that if I start a line with a '#' then what I right after it is ignored by R. 
+# Note that if I start a line with a '#' then what I right after it is ignored by R.
 ```
 
 All code needs to be within code chunks to be run. Anything outside of the code chunks is notes. You use markdown language to make these notes.
 You can read about markdown here: https://www.markdownguide.org/cheat-sheet/
-But we will also cover how to write markdown language later in the course. 
+But we will also cover how to write markdown language later in the course.
 
-## Set up 
+## Set up
 
-We are going to use this R package (we'll talk more about package in a later chapter). 
+We are going to use this R package (we'll talk more about package in a later chapter).
 
 ```{r}
 library(readr)
@@ -94,19 +72,19 @@ dir()
 
 This code above tells us what files are here. And one of those is a folder called `data`.
 
-## Getting the data 
+## Getting the data
 
-We're going to read in a dataset about candy that is located in our `data` folder. 
+We're going to read in a dataset about candy that is located in our `data` folder.
 
 ```{r}
-candy_df <- read_csv(file.path("data", "candy-data.csv"), 
+candy_df <- read_csv(file.path("data", "candy-data.csv"),
                      show_col_types = FALSE)
 ```
 
-## Explore the data 
+## Explore the data
 
-R Markdown will print out data in a table type format like this: 
-This dataset is from https://fivethirtyeight.com/videos/the-ultimate-halloween-candy-power-ranking/ originally. 
+R Markdown will print out data in a table type format like this:
+This dataset is from https://fivethirtyeight.com/videos/the-ultimate-halloween-candy-power-ranking/ originally.
 We've done some cleaning for you on this dataset already, but we'll have you do cleaning of your own data later!
 
 ```{r}
@@ -115,71 +93,71 @@ candy_df
 
 ## Plotting the data
 
-In R Markdowns, we can have plots print out here as well. Don't worry about the specifics of this code below, we will cover this later. 
+In R Markdowns, we can have plots print out here as well. Don't worry about the specifics of this code below, we will cover this later.
 
-For helping us answer our question: 
+For helping us answer our question:
 
-> What's the most popular Halloween candy? 
+> What's the most popular Halloween candy?
 
-One way would be to plot the `winpercent` data. This variable says what percentage of the time the survey responders chose a candy over any other candy it was matched up against. 
+One way would be to plot the `winpercent` data. This variable says what percentage of the time the survey responders chose a candy over any other candy it was matched up against.
 
 ```{r}
-ggplot(candy_df, aes(x = reorder(competitorname, -winpercent), y = winpercent, fill = chocolate)) + 
-  geom_bar(stat = "identity") + 
-  ggtitle("Most popular candies") + 
-  theme_bw() + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
-  xlab("") + 
+ggplot(candy_df, aes(x = reorder(competitorname, -winpercent), y = winpercent, fill = chocolate)) +
+  geom_bar(stat = "identity") +
+  ggtitle("Most popular candies") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  xlab("") +
   ylab("Win percentage")
 ```
 
 This plot shows us that `Reeses Peanut Butter Cups` had the highest win percentage!
 
-Additionally, we have color coded this plot to show whether or not a candy listed is chocolate or not. This appears to make it look like the chocolate candies have higher `winpercent` and thus are more popular than the non-chocolate candies. 
+Additionally, we have color coded this plot to show whether or not a candy listed is chocolate or not. This appears to make it look like the chocolate candies have higher `winpercent` and thus are more popular than the non-chocolate candies.
 
 But how can we ask this question in data science? We can use stats!
 
-## Get the stats 
+## Get the stats
 
-We can ask if chocolate candies are more popular by using stats! 
+We can ask if chocolate candies are more popular by using stats!
 
-In the second part of this project our hypothesis is: 
+In the second part of this project our hypothesis is:
 
 > Chocolate candies have a higher win percent than not chocolate candies
 
-To start to ask this question, we can take averages and print these out here: 
+To start to ask this question, we can take averages and print these out here:
 
 ```{r}
 # First we can just use averages to see what the differences are!
- candy_df %>% 
-  group_by(chocolate) %>% 
+ candy_df %>%
+  group_by(chocolate) %>%
   summarize(mean(winpercent))
 ```
 
-60 sounds bigger than 42? But is that different enough to answer our question? 
+60 sounds bigger than 42? But is that different enough to answer our question?
 
-Another way to explore our hypothesis is use a formal statistical test (in this case, a t-test): 
+Another way to explore our hypothesis is use a formal statistical test (in this case, a t-test):
 
 ```{r}
-chocolate <- filter(candy_df, chocolate) %>% 
+chocolate <- filter(candy_df, chocolate) %>%
   pull(winpercent)
 
-not_chocolate <- filter(candy_df, !chocolate) %>% 
+not_chocolate <- filter(candy_df, !chocolate) %>%
   pull(winpercent)
 
-t.test(chocolate, not_chocolate, 
+t.test(chocolate, not_chocolate,
          alternative = "greater")
 ```
-This test tells us our p value (we'll talk about those more later) is suppppppeer small so that yeah, 60 is different enough from 42 given the amount of data we gave this test. 
+This test tells us our p value (we'll talk about those more later) is suppppppeer small so that yeah, 60 is different enough from 42 given the amount of data we gave this test.
 
-### Conclusion 
+### Conclusion
 
-Write up your thoughts about this data science project here and answer the following questions: 
+Write up your thoughts about this data science project here and answer the following questions:
 
 - What did we find out about our questions? (what were our questions again?)
-- How did we explore our questions? 
-- What did our explorations show us? 
-- What follow up data science questions arise for you regarding this candy dataset now that we've explored it some? 
+- How did we explore our questions?
+- What did our explorations show us?
+- What follow up data science questions arise for you regarding this candy dataset now that we've explored it some?
 
 ## Print out session info
 
