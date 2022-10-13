@@ -68,7 +68,7 @@ https://www.kaggle.com/datasets/programmerrdai/literacy
 
 The resulting CSV file is called `cross-country-literacy-rates`.
 
-Both datasets have been downloaded and placed in the `data` and `raw` folder. Use readr::read_csv function to reach each dataset in. Call the first one `un_df` and the second `literacy_df`.
+Both datasets have been downloaded and placed in the `raw` folder (also called a directory) within the `data` folder of the `03_Cleaning_the_Data` project folder. Use `readr::read_csv()` function to read each dataset into R. Call the first one `un_df` and the second `literacy_df`. 
 
 ```{r, solution = TRUE}
 # Read in the dataset for un_df
