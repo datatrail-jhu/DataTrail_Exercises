@@ -58,7 +58,7 @@ if (!dir.exists("data")) {
 
 ## Get the data
 
-We are going to use two different country datasets from Kaggle.
+We are going to use two different country datasets from [Kaggle](https://www.kaggle.com/).
 
 This UN data-derived dataset with various stats about different countries: https://www.kaggle.com/datasets/sudalairajkumar/undata-country-profiles
 The resulting CSV file is called `country_profile_variables.csv`.
