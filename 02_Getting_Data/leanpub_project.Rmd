@@ -6,6 +6,30 @@ output: html_notebook
 
 # Getting Data Project
 
+## Objectives for this project
+
+To complete this project you’ll need to do a few things within this file. As you go through the notebook, you will have further instruction on how to complete these objectives.
+
+Be sure [you have followed the steps described in the previous chapter](https://datatrail-jhu.github.io/DataTrail/google-documents.html) and have your Googlesheet with Leanpub data prepared and ready.
+
+1. Go through this notebook, reading along.
+
+2. Fill in empty or incomplete code chunks when prompted to do so.
+
+3. Run each code chunk as you come across it by clicking the tiny green triangles at the right of each chunk. You should see the code chunks print out various output when you do this.
+
+4. At the very top of this file, put your own name in the `author:` place. Currently it says `"DataTrail Team"`. Be sure to put your name in quotes.
+
+5. In the `Conclusions` section, write up responses to each of these questions posed here.
+
+6. When you are satisfied with what you've written and added to this document you'll need to save it. In the menu, go to `File` > `Save`. Now the `nb.html` output resulting file will have your new output saved to it.
+
+7. Open up the resulting `leanpub_project.nb.html` file and click `View in Web Browser`. Does it look good to you? Did all the changes appear here as you expected.
+
+8. Upload your `Rmd` and your `nb.html` to your assignment folder (this is something that will be dependent on what your instructors have told you -- or if you are taking this on your own, just collect these projects in one spot, preferably a Google Drive)!
+
+7. Pat yourself on the back for finishing this project!
+
 ## The goal of this analysis
 
 <Write here what the goal of this analysis is. What question are we trying to answer?>
@@ -49,7 +73,7 @@ We'll read in the data using the code below. You will need to follow the prompt 
 if (interactive()) {
   ## Get data from your Google sheet
   leanpub_df <-  read_sheet(link, col_types = "c")
-} else { 
+} else {
   # Or if we already have the sheet but no access to credentials let's read it in from here
   if (file.exists(file.path("data", "leanpub_data.csv"))) {
     leanpub_df <- readr::read_csv(file.path("data", "leanpub_data.csv"))
@@ -67,7 +91,7 @@ Save this file to the `data` directory that we created. And name the file `leanp
 
 ## Explore the data
 
-Use some of the functions you learned to investigate your `leanpub_df`. How many dimensions is it? 
+Use some of the functions you learned to investigate your `leanpub_df`. How many dimensions is it?
 
 ```{r, solution = TRUE}
 ### Your code here
