@@ -32,11 +32,11 @@ Be sure [you have followed the steps described in the previous chapter](https://
 
 ## The goal of this analysis
 
-<Write here what the goal of this analysis is. What question are we trying to answer?> 
+<Write here what the goal of this analysis is. What question are we trying to answer?>
 
-## Set up 
+## Set up
 
-We are going to use this R package (we'll talk more about package in a later chapter). 
+We are going to use this R package (we'll talk more about package in a later chapter).
 
 ```{r}
 library(readr)
@@ -48,7 +48,7 @@ library(ggplot2)
 
 ## Set up directories
 
-Here we are going to make a data directory if it doesn't already exist. 
+Here we are going to make a data directory if it doesn't already exist.
 
 ```{r}
 if (!dir.exists("data")) {
@@ -56,42 +56,51 @@ if (!dir.exists("data")) {
 }
 ```
 
-## Getting the data 
+## Getting the data
 
-Here we are reading in a Google spreadsheet with information about leanpub books and their prices. We will read this data in using the googlesheets4 R package. 
+Here we are reading in a Google spreadsheet with information about leanpub books and their prices. We will read this data in using the googlesheets4 R package.
 
-```{r}
+Assign the URL of your leanpub googlesheet the name `link` and make sure to put quotes around it. Copy and paste it from GoogleSheets exactly.
+
+```{r, solution = TRUE}
 # Paste your URL to your googlesheet below! Make sure to put quotes around it
-link <- "PUT_YOUR_GOOGLESHEET_URL_HERE!"
+### Your code here
 ```
 
-We'll read in the data using the code below. You will need to follow the prompt to authorize the data to be read in using your Google login credentials. 
+We'll read in the data using the code below. You will need to follow the prompt to authorize the data to be read in using your Google login credentials.
 
 ```{r}
 if (interactive()) {
   ## Get data from your Google sheet
   leanpub_df <-  read_sheet(link, col_types = "c")
+} else {
+  # Or if we already have the sheet but no access to credentials let's read it in from here
+  if (file.exists(file.path("data", "leanpub_data.csv"))) {
+    leanpub_df <- readr::read_csv(file.path("data", "leanpub_data.csv"))
+  }
 }
 ```
 
-So we have a snapshot of what this data look like at the time that we ran this analysis (and for easier sharing purposes), let's use the `readr::write_csv()` function to write this to a file. 
+So we have a snapshot of what this data look like at the time that we ran this analysis (and for easier sharing purposes), let's use the `readr::write_csv()` function to write this to a file.
 
-Save this file to the `data` directory that we created. And name the file `leanpub_data.csv`. If you don't remember how to use the `readr::write_csv()` function, recall you can look it up using `?readr::write_csv`. 
+Save this file to the `data` directory that we created. And name the file `leanpub_data.csv`. If you don't remember how to use the `readr::write_csv()` function, recall you can look it up using `?readr::write_csv`.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-## Explore the data 
+## Explore the data
 
-Use some of the functions you learned to investigate your `leanpub_df`. How many dimensions is it? What kind of class object is it? 
+Use some of the functions you learned to investigate your `leanpub_df`. How many dimensions is it?
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-```{r}
+What kind of class object is it?
 
+```{r, solution = TRUE}
+### Your code here
 ```
 
 ## Cleaning the data
@@ -103,49 +112,49 @@ For the upcoming code, we will need to make sure that we have columns named *exa
 all(c('title', 'readers', 'suggested', 'minimum') %in% colnames(leanpub_df))
 ```
 
-If the above prints out false, you may want to return to your Googlesheets, rename the columns accordingly and start from the top of this notebook again. 
+If the above prints out false, you may want to return to your Googlesheets, rename the columns accordingly and start from the top of this notebook again.
 
 This code will clean your data for you.
 
 ```{r}
-leanpub_df <- leanpub_df %>% 
-  mutate_at(dplyr::vars(readers, suggested, minimum), 
+leanpub_df <- leanpub_df %>%
+  mutate_at(dplyr::vars(readers, suggested, minimum),
                          as.numeric)
 ```
 
-Now that the data are being treated as numeric values properly, we can obtain some summary statistics for your `leanpub_df` dataset. Use a function we have discussed to do this. 
+Now that the data are being treated as numeric values properly, we can obtain some summary statistics for your `leanpub_df` dataset. Use a function we have discussed to do this.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-## Plotting the data 
+## Plotting the data
 
 To investigate our question, we will want to investigate any potential relationship between the number of readers for a book and the suggested price. We will plot these data in the form of a scatterplot. In upcoming chapters we will go into more detail about how to make plots yourself.  
 
 ```{r}
-ggplot(leanpub_df, aes(readers, suggested)) + 
-  geom_point(color = "blue") + 
+ggplot(leanpub_df, aes(readers, suggested)) +
+  geom_point(color = "blue") +
   theme_minimal()
 ```
 
-## Get the stats 
+## Get the stats
 
-Is there a relationship between `readers` and `suggested` price? We can also use a correlation to ask this question. 
+Is there a relationship between `readers` and `suggested` price? We can also use a correlation to ask this question.
 
 ```{r}
 cor.test(leanpub_df$readers, leanpub_df$suggested)
 ```
-If the p value reported is very very small, then there might be a relationship. But also it is likely you'll need to collect more data to get a more confident conclusion using this test. 
+If the p value reported is very very small, then there might be a relationship. But also it is likely you'll need to collect more data to get a more confident conclusion using this test.
 
-### Conclusion 
+### Conclusion
 
-Write up your thoughts about this data science project here and answer the following questions: 
+Write up your thoughts about this data science project here and answer the following questions:
 
-- What did we find out about our questions? 
-- How did we explore our questions? 
-- What did our explorations show us? 
-- What follow up data science questions arise for you regarding this candy dataset now that we've explored it some? 
+- What did we find out about our questions?
+- How did we explore our questions?
+- What did our explorations show us?
+- What follow up data science questions arise for you regarding this candy dataset now that we've explored it some?
 
 ## Print out session info
 

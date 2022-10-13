@@ -30,11 +30,11 @@ To complete this project you’ll need to do a few things within this file. As y
 
 ## The goal of this analysis
 
-<Write here what the goal of this analysis is. What question are we trying to answer?> 
+<Write here what the goal of this analysis is. What question are we trying to answer?>
 
-## Set up 
+## Set up
 
-Let's load these packages for use. 
+Let's load these packages for use.
 
 ```{r}
 ## you can add more, or change...these are suggestions
@@ -56,12 +56,11 @@ if (!dir.exists("data")) {
 ```
 
 
-## Get the data 
+## Get the data
 
 We are going to use two different country datasets from [Kaggle](https://www.kaggle.com/).
 
 This UN data-derived dataset with various stats about different countries: https://www.kaggle.com/datasets/sudalairajkumar/undata-country-profiles
-
 The resulting CSV file is called `country_profile_variables.csv`.
 
 This literacy dataset with statistics about literacy across countries
@@ -71,50 +70,41 @@ The resulting CSV file is called `cross-country-literacy-rates`.
 
 Both datasets have been downloaded and placed in the `raw` folder (also called a directory) within the `data` folder of the `03_Cleaning_the_Data` project folder. Use `readr::read_csv()` function to read each dataset into R. Call the first one `un_df` and the second `literacy_df`. 
 
-```{r}
+```{r, solution = TRUE}
 # Read in the dataset for un_df
+### Your code here
 ```
 
-```{r}
+```{r, solution = TRUE}
 # Read in the dataset for literacy_df
-
+### Your code here
 ```
 
-Use functions we have discussed previously to see what variables are in both `un_df` and `us_gov_df`. 
+Use functions we have discussed previously to see what variables are in both `un_df` and `us_gov_df`.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-### Cleaning the datasets 
+### Cleaning the datasets
 
 You'll notice both datasets have pretty messy looking column names that are annoying to use. Use the `janitor::clean_names()` function to clean these up. Don't forget to reassign the data objects!
 
-```{r}
-
-```
-
-Now take a look at the variable names again to see how they have changed.
-
-```{r}
-
-```
-
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
 #### Clean up literacy_df
 
-The `literacy_df` data frame shows multiple rows for each country. For this analysis, let's only keep the latest year recorded for each country. 
-You can use  `arrange()` and `desc()` (or a minus sign) to first order the data by the latest year recorded for each country.  Then use the `distinct()` function to keep only rows from the lastest year for each country by essentially selecting for the first mention of each country. Hint you will need to use an argument within `distinct()` to not lose the other columns. (Again don't forget to reassign your data objects to keep your work.)
+The `literacy_df` data frame shows multiple rows for each country. For this analysis, let's only keep the latest year recorded for each country.
+You can use  `arrange()` and `desc()` (or a minus sign)  to first order the data by the latest year recorded for each country.  Then use the `distinct()` function to keep only rows from the lastest year for each country by essentially selecting for the first mention of each country. Hint you will need to use an argument within `distinct()` to not lose the other columns. (Again don't forget to reassign your data objects to keep your work.)
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
 
@@ -122,17 +112,16 @@ You can use  `arrange()` and `desc()` (or a minus sign) to first order the data 
 
 There's a number of variables in `un_df` that are numeric but are being treated as a character. Use the `glimpse()` function of the `dplyr` package to take a look at the variables to determine how often there are numeric values that are being treated as a character.
 
-Let's take a closer look at `life_expectancy_at_birth_females_males_years` as an example. Use the `head()` function and print out the first 10 rows to see.  
+Let's take a look at `life_expectancy_at_birth_females_males_years` as an example. Use the `head()` function and print out the first 10 rows to see.  
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-Let's also take a closer look at `co2_emission_estimates_million_tons_tons_per_capita` as an example.   
+Let's also take a closer look at `co2_emission_estimates_million_tons_tons_per_capita` as an example.
 
-```{r}
-
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
 Two things we can notice here. One is that really `life_expectancy_at_birth_females_males_years` looks like it is two variables, one for female and one for male. We'll want to split this into two columns. 
@@ -141,148 +130,146 @@ Another is that they are using two different items to note missing data `-99` an
 
 Let's start with some of the missing data. To replace these `-99`(the numeric version) and `"-99"` (the character version) and `.../...` , we can use the function: `naniar::replace_with_na()`. We'll want to do this for every variable, not just the one we looked at above.  When we replace each of these they will have a single `NA` value even though we have two values for the observations where we have numeric values.
 
-```{r}
-un_df <- naniar::replace_with_na_all(un_df,
-                                     condition = ~.x %in% c(-99, "-99", ".../..."))
+```{r, solution = TRUE}
+### Your code here
 ```
 
+Let's check to see if this did what we expected.
 
-Let's check to see if this did what we expected. 
-
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
 Great, hopefully it looks like we have replaced the the `-99` ,`"-99"`, and `.../...` values. It also looks like we don't have any values like this `.../49.6` or this `56.2/...`. If we did we would need to do something a little fancier (possibly with the `stringr` package) but for now we don't need to worry about that. It is always good to check your data though!
 
 Let's split the column `life_expectancy_at_birth_females_males_years`  into two columns so we can more appropriately deal with these data. To do this we can use a handy function called `tidyr::separate()`. Call the new resulting columns `"life_expectancy_at_birth_females"` and `"life_expectancy_at_birth_males"` by specifying this with the `into` argument. We can specify that we want to separate by the `/` symbol by using the `sep` argument. For observations where we have an `NA` value, both new columns will receive an `NA`.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
 
-After splitting these data, you'll notice they are still characters, so you will need to coerce them to numeric variables with a `mutate()` step. 
+After splitting these data, you'll notice they are still characters, so you will need to coerce them to numeric variables with a `mutate()` step.
 
-In fact, there are a lot more columns like this. But for now just make these life_expectancy  variables into numeric and don't worry about the others. 
+In fact, there are a lot more columns like this. But for now just make these life_expectancy  variables into numeric and don't worry about the others.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-The `un_df` has a `region` column. 
+The `un_df` has a `region` column.
 
-Let's run `summary` on it.  
+Let's run `summary()` on it.  
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-The regions listed are repeated but because they are characters, summary doesn't give us useful information about the categories. 
-This `region` columns would be best treated as factors. Turn this `region` column into a factor. 
+The regions listed are repeated but because they are characters, summary doesn't give us useful information about the categories.
+This `region` columns would be best treated as factors. Turn this `region` column into a factor.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-Re-run `summary` on your region columns  to confirm that the data make more sense now. 
+Re-run `summary` on your region columns  to confirm that the data make more sense now.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-### Joining the data 
+### Joining the data
 
-Now we have two generally clean datasets that both have information about countries. Use a `dplyr::join` function to join all the rows for countries that are in both `un_df` and `literacy_df` but exclude rows from countries that aren't in both. Look up `?dplyr::join` for more help. You will need to use the `by` argument. 
+Now we have two generally clean datasets that both have information about countries. Use a `dplyr::join` function to join all the rows for countries that are in both `un_df` and `literacy_df` but exclude rows from countries that aren't in both. Look up `?dplyr::join` for more help. You will need to use the `by` argument.
 
-Call this new data frame `countries_df`. 
+Call this new data frame `countries_df`.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
 We will be returning to this dataset in a future project. Save `countries_df` to an RDS file here. Save this file to the `data` folder and name it `countries_df.rds`.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-### Reshape data in preparation for plotting 
+### Reshape data in preparation for plotting
 
-We want to see how literacy is related to life expectancy. But have literacy split up by gender. Let's reshape our data into something that will be easier to plot. 
+We want to see how literacy is related to life expectancy. But have literacy split up by gender. Let's reshape our data into something that will be easier to plot.
 
-First, select only the following columns: `country`, `year`, `life_expectancy_at_birth_females`, `life_expectancy_at_birth_males`, and `literacy_rates_world_bank_cia_world_factbook_and_other_sources`. Name this new `select`ed data frame `plotting_df`. 
+First, select only the following columns: `country`, `year`, `life_expectancy_at_birth_females`, `life_expectancy_at_birth_males`, and `literacy_rates_world_bank_cia_world_factbook_and_other_sources`. Name this new `select`ed data frame `plotting_df`.
 
-In this same step, let's also shorten the column name `literacy_rates_world_bank_cia_world_factbook_and_other_sources` to just `literacy_rates`. 
+In this same step, let's also shorten the column name `literacy_rates_world_bank_cia_world_factbook_and_other_sources` to just `literacy_rates`.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-Now, let's reshape this data so that it is longer. We will want to modify the `life_expectancy_at_birth_females` and `life_expectancy_at_birth_males` variables so that we instead have one column for `life_expectancy` values and one for `gender` which specifies what column the values originally came from. We want to keep `country`, `year`, `literacy_rates`. Use the `pivot_longer` function. 
+Now, let's reshape this data so that it is longer. We will want to modify the `life_expectancy_at_birth_females` and `life_expectancy_at_birth_males` variables so that we instead have one column for `life_expectancy` values and one for `gender` which specifies what column the values originally came from. We want to keep `country`, `year`, `literacy_rates`. Use the `pivot_longer` function.
 
-```{r}
-
+```{r, solution = TRUE}
+### Your code here
 ```
 
-You'll notice your new column `gender` has the whole old variable name. We don't really need all that. Use string manipulations so that you only have either `males` or `females`. 
+You'll notice your new column `gender` has the whole old variable name. We don't really need all that. Use string manipulations so that you only have either `males` or `females`.
 
 ```{r}
-
+plotting_df <- plotting_df %>%
+  mutate(gender = str_remove(gender, "life_expectancy_at_birth_"))
 ```
 
-## Plot the data! 
+## Plot the data!
 
-Let's make a plot of life expectancy and literacy rates! 
+Let's make a scatter plot of life expectancy and literacy rates! Color the plot by year.
 
 ```{r}
-lit_plot <- plotting_df %>% 
-  ggplot(aes(life_expectancy, literacy_rates, color = year)) + 
-  geom_point() + 
-  theme_minimal() + 
-  ylab("Literacy Rates") + 
+lit_plot <- plotting_df %>%
+  ggplot(aes(life_expectancy, literacy_rates, color = year)) +
+  geom_point() +
+  theme_minimal() +
+  ylab("Literacy Rates") +
   xlab("Life Expectancy")
 
 lit_plot
 ```
 
-This looks like literacy and life expectancy are positively related to each other. In other words, in countries with higher literacy rates, there's also a longer life expectancy. 
+This looks like literacy and life expectancy are positively related to each other. In other words, in countries with higher literacy rates, there's also a longer life expectancy.
 
-In this plot we've color coded by the year that the literacy data was recorded. This way we are aware of how differences in years might influence this relationship. 
+In this plot we've color coded by the year that the literacy data was recorded. This way we are aware of how differences in years might influence this relationship.
 
-But! Really, we've lumped together `female` and `male` data points with each country which isn't really the right way to treat this data. Let's use `facet_wrap()` to make this one plot into two separate plots. 
+But! Really, we've lumped together `female` and `male` data points with each country which isn't really the right way to treat this data. Let's use `facet_wrap()` to make this one plot into two separate plots.
 
-We can also add a trendline to get a better sense of how these two variables relate to one another using `geom_smooth()`. 
-
+We can also add a trend line to get a better sense of how these two variables relate to one another using `geom_smooth()`.
 
 ```{r}
 lit_plot + facet_wrap(~gender) + geom_smooth()
 ```
 
-It looks like this relationship is stable across `male` and `female`. It also looks like a stronger relationship for the life expectancy and literacy values in the middle to lower range. Let's get a stat on the relationship. 
+It looks like this relationship is stable across `male` and `female`.  It also looks like a stronger relationship for the life expectancy and literacy values in the middle to lower range. Let's get a stat on the relationship.
 
-## Get the stats 
+## Get the stats
 
-We can also use a correlation to ask this question. 
+We can also use a correlation to ask this question.
 
 ```{r}
-cor.test(countries_df$life_expectancy_at_birth_females, 
+cor.test(countries_df$life_expectancy_at_birth_females,
          countries_df$literacy_rates_world_bank_cia_world_factbook_and_other_sources)
 
-cor.test(countries_df$life_expectancy_at_birth_males, 
+cor.test(countries_df$life_expectancy_at_birth_males,
          countries_df$literacy_rates_world_bank_cia_world_factbook_and_other_sources)
 ```
 
 With using either `male` or `female` this relationship looks pretty strong!
 
-### Conclusion 
+### Conclusion
 
-Write up your thoughts about this data science project here and answer the following questions: 
+Write up your thoughts about this data science project here and answer the following questions:
 
-- What did we find out about our questions? 
-- How did we explore our questions? 
-- What did our explorations show us? 
-- What follow up data science questions arise for you regarding this candy dataset now that we've explored it some? 
+- What did we find out about our questions?
+- How did we explore our questions?
+- What did our explorations show us?
+- What follow up data science questions arise for you regarding this candy dataset now that we've explored it some?
 
 ## Print out session info
 

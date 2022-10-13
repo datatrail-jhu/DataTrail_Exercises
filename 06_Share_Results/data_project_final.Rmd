@@ -6,7 +6,7 @@ output: html_notebook
 
 # Final Data Project
 
-### Your objectives!
+## Your objectives!
 
 To complete this project there are a few requirements you will need to fulfill. Remember that you are not on your own for this project! Data science is done best as a community, so please ask others (and instructors) questions you have when you get stuck!
 
@@ -24,16 +24,18 @@ To complete this project there are a few requirements you will need to fulfill. 
 
 8. Pat yourself on the back for all this work! You are a data scientist!
 
-## Data
+## Data Sources
 
 For this project you will use whatever data you choose.
 
-Options for places to find data are:
+Refer back to our [Finding Data chapter](https://datatrail-jhu.github.io/DataTrail/finding-data.html) for more info on finding data.
 
-- https://www.kaggle.com/datasets
-- https://shiny.rstudio.com/gallery/tidy-tuesday.html
-- https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/00Index.html
-(This is the data that comes with R - you can load them using `datasets::` and pressing tab in RStudio to see the names of the datasets - for example `datasets::ability.cov` will load the ability dataset.)
+Some options for places to find data are:
+
+- [Kaggle](https://datatrail-jhu.github.io/DataTrail/finding-data.html#kaggle)
+- [FiveThirtyEight](https://datatrail-jhu.github.io/DataTrail/finding-data.html#fivethirtyeight-data)
+- You can see datasets you already have in R by running this command: `ls("package:datasets")`.
+
 You are not limited to these options for finding your data.
 
 <Write where you got your data and provide the link if applicable.>
@@ -42,10 +44,11 @@ You are not limited to these options for finding your data.
 
 ## The goal of this analysis
 
-<Write here what the goal of this analysis is. What question are we trying to answer?> 
-## Set up 
+<Write here what the goal of this analysis is. What question are we trying to answer?>
 
-Load packages you will need for this analysis. 
+## Set up
+
+Load packages you will need for this analysis.
 
 ```{r}
 ## you can add more, or change...these are suggestions
@@ -58,7 +61,7 @@ library(tidyr)
 
 ## Set up directories
 
-Set up the directories you will need. 
+Set up the directories you will need.
 
 ```{r}
 if (!dir.exists("data")) {
@@ -70,14 +73,15 @@ if (!dir.exists("results")) {
 ```
 
 
-## Get the data 
+## Get the data
 
+<Write here a bit about this dataset and put a link to where it is from>
 
 ```{r}
 # Read in your dataset(s)
 ```
 
-Explore your data here and describe what variables and samples you have.
+Explore your data here
 
 ```{r}
 
@@ -90,23 +94,23 @@ Explore your data here and describe what variables and samples you have.
 
 ```
 
-## Plot the data! 
+## Plot the data!
 
 ```{r}
-ggplot(aes(VARIABLE)) + 
-  geom_point() 
+ggplot(aes(VARIABLE)) +
+  geom_point()
 ```
 
-## Get the stats 
+## Get the stats
 
 
-### Conclusion 
+### Conclusion
 
-Write up your thoughts about this data science project here and answer the following questions: 
+Write up your thoughts about this data science project here and answer the following questions:
 
-- What did you find out in regards to your original question? 
-- What exceptions or caveats do you have in regards to your analysis you did? 
-- What follow up questions do you have? 
+- What did you find out in regards to your original question?
+- What exceptions or caveats do you have in regards to your analysis you did?
+- What follow up questions do you have?
 
 ## Print out session info
 
