@@ -63,7 +63,7 @@ The data we'll be using for this part of the project are about Airbnbs and can b
 First, we'll read the data in from our `data/raw` directory. Use the `read_csv` function to do this. Call this new data frame `airbnb_df`.
 
 ```{r}
-airbnb_df <- readr::read_csv(file.path("data", "raw", "Airbnb_Open_Data.csv"))
+### Your code here
 ```
 
 Use this chunk to do some exploring of this dataset to get an idea of what kind of information is here.

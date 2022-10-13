@@ -47,7 +47,7 @@ library(tidyr)
 
 ## Set up directories
 
-Here we are going to make a data directory if it doesn't already exist.
+Here we are going to make a directory or folder called `data`, if it doesn't already exist. No need for you to change this code. 
 
 ```{r}
 if (!dir.exists("data")) {
@@ -92,7 +92,7 @@ Use functions we have discussed previously to see what variables are in both `un
 
 ### Cleaning the datasets
 
-You'll notice both datasets have pretty messy looking column names that are annoying to use. Use the `janitor::clean_names()` function to clean these up.
+You'll notice both datasets have pretty messy looking column names that are annoying to use. Use the `janitor::clean_names()` function to clean these up. Don't forget to reassign the data objects!
 
 ```{r, solution = TRUE}
 ### Your code here
@@ -105,14 +105,12 @@ You can use  `arrange()` and `desc()` (or a minus sign)  to first order the data
 
 ```{r, solution = TRUE}
 ### Your code here
-# or
-### Your code here
 ```
 
 
 #### Clean up un_df
 
-There's a number of variables in `un_df` that are numeric but are being treated as a character.
+There's a number of variables in `un_df` that are numeric but are being treated as a character. Use the `glimpse()` function of the `dplyr` package to take a look at the variables to determine how often there are numeric values that are being treated as a character.
 
 Let's take a look at `life_expectancy_at_birth_females_males_years` as an example. Use the `head()` function and print out the first 10 rows to see.  
 
@@ -126,11 +124,11 @@ Let's also take a closer look at `co2_emission_estimates_million_tons_tons_per_c
 ### Your code here
 ```
 
-Two things we can notice here. One is that really it looks like this is two variables, one for female and one for male. We'll want to split this into two columns.
+Two things we can notice here. One is that really `life_expectancy_at_birth_females_males_years` looks like it is two variables, one for female and one for male. We'll want to split this into two columns. 
 
-Another is that they are using two different items to note missing data `-99` and `...` For R to deal with missing data appopriately we will want to change these to be `NA`.
+Another is that they are using two different items to note missing data `-99` and `...` For R to deal with missing data appropriately we will want to change these to be `NA`. This is also true for the `co2_emission_estimates_million_tons_tons_per_capita` variable which is being considered by R as a numeric value (based on how it is labeled as `dbl`).
 
-Let's start with the missing data. To replace these `-99` and `...` we can use the function: `naniar::replace_with_na()`. We'll want to do this for every variable, not just the one we looked at above.
+Let's start with some of the missing data. To replace these `-99`(the numeric version) and `"-99"` (the character version) and `.../...` , we can use the function: `naniar::replace_with_na()`. We'll want to do this for every variable, not just the one we looked at above.  When we replace each of these they will have a single `NA` value even though we have two values for the observations where we have numeric values.
 
 ```{r, solution = TRUE}
 ### Your code here
